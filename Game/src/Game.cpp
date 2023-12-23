@@ -36,27 +36,27 @@ void Game::OnCreate()
 
 	for (int i = 0; i < 4; i++) {
 		towers[0][i] = new ArcherTower(m_Scene);
-		towers[0][i]->setPosition(glm::vec3(0, 0, i * 96));
+		towers[0][i]->setPosition(glm::vec3(1 * 96, 0, i * 96 + 96));
 		towers[0][i]->setlevel(i, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[1][i] = new BallistaTower(m_Scene);
-		towers[1][i]->setPosition(glm::vec3(96, 0, i * 96));
+		towers[1][i]->setPosition(glm::vec3(2 * 96, 0, i * 96 + 96));
 		towers[1][i]->setlevel(i, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[2][i] = new CannonTower(m_Scene);
-		towers[2][i]->setPosition(glm::vec3(2*96, 0, i * 96));
+		towers[2][i]->setPosition(glm::vec3(3 * 96, 0, i * 96 + 96));
 		towers[2][i]->setlevel(i, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[3][i] = new PoisonTower(m_Scene);
-		towers[3][i]->setPosition(glm::vec3(3*96, 0, i * 96));
+		towers[3][i]->setPosition(glm::vec3(4 * 96, 0, i * 96 + 96));
 		towers[3][i]->setlevel(i, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[4][i] = new WizardTower(m_Scene);
-		towers[4][i]->setPosition(glm::vec3(4 * 96, 0, i * 96));
+		towers[4][i]->setPosition(glm::vec3(5 * 96, 0, i * 96 + 96));
 		towers[4][i]->setlevel(i, m_Scene);
 	}
 	UpgradeTest = new WizardTower(m_Scene);
@@ -67,9 +67,9 @@ void Game::OnCreate()
 
 
 	//update MapStatus
-	for (int i = 0;i < 5;i++) {
-		for (int j = 0;j < 4;j++) {
-			m_map->UpdateMap(m_Scene, i, j, 1);//tower
+	for (int i = 1;i < 6;i++) {
+		for (int j = 1;j < 5;j++) {
+			m_map->ChangeColor(m_Scene, i, j, 1);//tower
 		}
 	}
 
@@ -116,6 +116,7 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 	}
 	if (IO::IsKeyDown(KeyCode::F))speed = (speed == 700.f) ? 700.0f : speed + 70.0f;
 	if (IO::IsKeyDown(KeyCode::V))speed = 70.0f;
+	if (IO::IsKeyDown(KeyCode::L))m_map->DecidePath(m_Scene);
 		
 	
 	// Rotation to direction
