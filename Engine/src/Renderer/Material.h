@@ -12,4 +12,5 @@ struct Material
 	Ref<Texture2D> MetallicTexture;
 	Ref<Texture2D> RoughnessTexture;
 	Ref<Texture2D> AmbientOcclusionTexture;
+	glm::vec4 Color = glm::vec4(1.0f); // Alpha for determining opaque or transparent
 };

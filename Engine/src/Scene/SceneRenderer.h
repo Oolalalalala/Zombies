@@ -43,21 +43,25 @@ private:
 	struct MeshRenderData
 	{
 		Ref<Mesh> Mesh;
-		std::vector<Ref<Material>> Materials;
+		Ref<Material> Material;
+		uint32_t SubmeshIndex;
 		glm::mat4 Transform;
 	};
 
 	struct SkinnedMeshRenderData
 	{
 		Ref<SkinnedMesh> Mesh;
-		std::vector<Ref<Material>> Materials;
-		glm::mat4 Transform;
+		Ref<Material> Material;
+		uint32_t SubmeshIndex;
 		Ref<Animation> Animation;
 		float AnimationTime;
+		glm::mat4 Transform;
 	};
 
-	std::vector<MeshRenderData> m_MeshRenderData;
-	std::vector<SkinnedMeshRenderData> m_SkinnedMeshRenderData;
+	std::vector<MeshRenderData> m_OpaqueMeshRenderData;
+	std::vector<MeshRenderData> m_TransparentMeshRenderData;
+	std::vector<SkinnedMeshRenderData> m_OpaqueSkinnedMeshRenderData;
+	std::vector<SkinnedMeshRenderData> m_TransparentSkinnedMeshRenderData;
 
 	Buffer<glm::mat4> m_BoneTransformBuffer;
 };

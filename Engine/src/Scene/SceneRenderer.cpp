@@ -64,8 +64,10 @@ void SceneRenderer::ShutDown()
 
 void SceneRenderer::BeginScene(const Camera& camera)
 {
-	m_MeshRenderData.clear();
-	m_SkinnedMeshRenderData.clear();
+	m_OpaqueMeshRenderData.clear();
+	m_TransparentMeshRenderData.clear();
+	m_OpaqueSkinnedMeshRenderData.clear();
+	m_TransparentSkinnedMeshRenderData.clear();
 
 	CameraUniformBufferData cameraData;
 	cameraData.ViewProjectionMatrix = camera.GetViewProjectionMatrix();
@@ -75,77 +77,151 @@ void SceneRenderer::BeginScene(const Camera& camera)
 
 void SceneRenderer::EndScene()
 {
+	// To minimize repetitive computations and changes
+	Ref<Mesh> lastMesh = nullptr;
+	Ref<SkinnedMesh> lastSkinnedMesh = nullptr; 
+
 	m_ModelShader->Bind();
 
-	for (auto& data : m_MeshRenderData)
+	for (auto& data : m_OpaqueMeshRenderData)
 	{
-		m_ModelShader->SetUniformMat4("u_Model", data.Transform);
-
-		auto mesh = data.Mesh;
-		mesh->GetVertexArray()->Bind();
-
-		for (auto& submesh : mesh->GetSubmeshes())
+		if (lastMesh != data.Mesh)
 		{
-			CORE_VERIFY(submesh.MaterialIndex < data.Materials.size(), "Material index greater than material table size");
-
-			auto material = data.Materials[submesh.MaterialIndex];
-
-			if (material->AlbedoTexture)             material->AlbedoTexture           ->Bind(0);
-			if (material->NormalTexture)             material->NormalTexture           ->Bind(1);
-			if (material->MetallicTexture)           material->MetallicTexture         ->Bind(2);
-			if (material->RoughnessTexture)          material->RoughnessTexture        ->Bind(3);
-			if (material->AmbientOcclusionTexture)   material->AmbientOcclusionTexture ->Bind(4);
-
-			RendererAPI::DrawIndexedOffset(submesh.IndexCount, submesh.BaseIndex, submesh.BaseVertex);
+			data.Mesh->GetVertexArray()->Bind();
+			lastMesh = data.Mesh;
 		}
+
+		m_ModelShader->SetUniformMat4("u_Model", data.Transform);
+		m_ModelShader->SetUniformFloat4("u_Color", data.Material->Color);
+
+		if (data.Material->AlbedoTexture)             data.Material->AlbedoTexture           ->Bind(0);
+		if (data.Material->NormalTexture)             data.Material->NormalTexture           ->Bind(1);
+		if (data.Material->MetallicTexture)           data.Material->MetallicTexture         ->Bind(2);
+		if (data.Material->RoughnessTexture)          data.Material->RoughnessTexture        ->Bind(3);
+		if (data.Material->AmbientOcclusionTexture)   data.Material->AmbientOcclusionTexture ->Bind(4);
+
+		auto& submesh = data.Mesh->GetSubmeshes()[data.SubmeshIndex];
+		RendererAPI::DrawIndexedOffset(submesh.IndexCount, submesh.BaseIndex, submesh.BaseVertex);
 	}
 
 
 	m_SkinnedMeshShader->Bind();
 
-	for (auto& data : m_SkinnedMeshRenderData)
+	for (auto& data : m_OpaqueSkinnedMeshRenderData)
 	{
-		m_SkinnedMeshShader->SetUniformMat4("u_Model", data.Transform);
-
-		auto skeleton = data.Mesh->GetSkeleton();
-		skeleton->GetBoneTransforms(data.Animation, data.AnimationTime, m_BoneTransformBuffer);
-		m_BoneTransformUniformBuffer->SetData(m_BoneTransformBuffer.Data, skeleton->GetBoneCount() * sizeof(glm::mat4));
-
-		auto mesh = data.Mesh;
-		mesh->GetVertexArray()->Bind();
-
-		for (auto& submesh : mesh->GetSubmeshes())
+		if (lastSkinnedMesh != data.Mesh)
 		{
-			CORE_VERIFY(submesh.MaterialIndex < data.Materials.size(), "Material index greater than material table size");
+			data.Mesh->GetVertexArray()->Bind();
 
-			auto material = data.Materials[submesh.MaterialIndex];
+			auto skeleton = data.Mesh->GetSkeleton();
+			skeleton->GetBoneTransforms(data.Animation, data.AnimationTime, m_BoneTransformBuffer);
+			m_BoneTransformUniformBuffer->SetData(m_BoneTransformBuffer.Data, skeleton->GetBoneCount() * sizeof(glm::mat4));
 
-			if (material->AlbedoTexture)             material->AlbedoTexture           ->Bind(0);
-			if (material->NormalTexture)             material->NormalTexture           ->Bind(1);
-			if (material->MetallicTexture)           material->MetallicTexture         ->Bind(2);
-			if (material->RoughnessTexture)          material->RoughnessTexture        ->Bind(3);
-			if (material->AmbientOcclusionTexture)   material->AmbientOcclusionTexture ->Bind(4);
-
-			RendererAPI::DrawIndexedOffset(submesh.IndexCount, submesh.BaseIndex, submesh.BaseVertex);
+			lastSkinnedMesh = data.Mesh;
 		}
+
+		m_SkinnedMeshShader->SetUniformMat4("u_Model", data.Transform);
+		m_SkinnedMeshShader->SetUniformFloat4("u_Color", data.Material->Color);
+
+		if (data.Material->AlbedoTexture)             data.Material->AlbedoTexture           ->Bind(0);
+		if (data.Material->NormalTexture)             data.Material->NormalTexture           ->Bind(1);
+		if (data.Material->MetallicTexture)           data.Material->MetallicTexture         ->Bind(2);
+		if (data.Material->RoughnessTexture)          data.Material->RoughnessTexture        ->Bind(3);
+		if (data.Material->AmbientOcclusionTexture)   data.Material->AmbientOcclusionTexture ->Bind(4);
+
+		auto& submesh = data.Mesh->GetSubmeshes()[data.SubmeshIndex];
+		RendererAPI::DrawIndexedOffset(submesh.IndexCount, submesh.BaseIndex, submesh.BaseVertex);
+	}
+
+	
+	// To minimize repetitive computations and changes
+	lastMesh = nullptr;
+	lastSkinnedMesh = nullptr; 
+
+	m_ModelShader->Bind();
+
+	for (auto& data : m_TransparentMeshRenderData)
+	{
+		if (lastMesh != data.Mesh)
+		{
+			data.Mesh->GetVertexArray()->Bind();
+			lastMesh = data.Mesh;
+		}
+
+		m_ModelShader->SetUniformMat4("u_Model", data.Transform);
+		m_ModelShader->SetUniformFloat4("u_Color", data.Material->Color);
+
+		if (data.Material->AlbedoTexture)             data.Material->AlbedoTexture           ->Bind(0);
+		if (data.Material->NormalTexture)             data.Material->NormalTexture           ->Bind(1);
+		if (data.Material->MetallicTexture)           data.Material->MetallicTexture         ->Bind(2);
+		if (data.Material->RoughnessTexture)          data.Material->RoughnessTexture        ->Bind(3);
+		if (data.Material->AmbientOcclusionTexture)   data.Material->AmbientOcclusionTexture ->Bind(4);
+
+		auto& submesh = data.Mesh->GetSubmeshes()[data.SubmeshIndex];
+		RendererAPI::DrawIndexedOffset(submesh.IndexCount, submesh.BaseIndex, submesh.BaseVertex);
+	}
+
+
+	m_SkinnedMeshShader->Bind();
+
+	for (auto& data : m_TransparentSkinnedMeshRenderData)
+	{
+		if (lastSkinnedMesh != data.Mesh)
+		{
+			data.Mesh->GetVertexArray()->Bind();
+
+			auto skeleton = data.Mesh->GetSkeleton();
+			skeleton->GetBoneTransforms(data.Animation, data.AnimationTime, m_BoneTransformBuffer);
+			m_BoneTransformUniformBuffer->SetData(m_BoneTransformBuffer.Data, skeleton->GetBoneCount() * sizeof(glm::mat4));
+
+			lastSkinnedMesh = data.Mesh;
+		}
+		
+		m_SkinnedMeshShader->SetUniformMat4("u_Model", data.Transform);
+		m_SkinnedMeshShader->SetUniformFloat4("u_Color", data.Material->Color);
+
+		if (data.Material->AlbedoTexture)             data.Material->AlbedoTexture           ->Bind(0);
+		if (data.Material->NormalTexture)             data.Material->NormalTexture           ->Bind(1);
+		if (data.Material->MetallicTexture)           data.Material->MetallicTexture         ->Bind(2);
+		if (data.Material->RoughnessTexture)          data.Material->RoughnessTexture        ->Bind(3);
+		if (data.Material->AmbientOcclusionTexture)   data.Material->AmbientOcclusionTexture ->Bind(4);
+
+		auto& submesh = data.Mesh->GetSubmeshes()[data.SubmeshIndex];
+		RendererAPI::DrawIndexedOffset(submesh.IndexCount, submesh.BaseIndex, submesh.BaseVertex);
 	}
 }
 
 void SceneRenderer::SubmitMesh(Ref<Mesh> mesh, const std::vector<Ref<Material>>& materials, const glm::mat4& transform)
 {
-	auto& data = m_MeshRenderData.emplace_back();
-	data.Mesh = mesh;
-	data.Materials = materials;
-	data.Transform = transform;
+	auto& submeshes = mesh->GetSubmeshes();
+	for (uint32_t i = 0; i < submeshes.size(); i++)
+	{
+		CORE_VERIFY(submeshes[i].MaterialIndex < materials.size(), "Material index greater than material table size");
+		auto& material = materials[submeshes[i].MaterialIndex];
+
+		auto& data = material->Color.a == 1.0f ? m_OpaqueMeshRenderData.emplace_back() : m_TransparentMeshRenderData.emplace_back();
+		data.Mesh = mesh;
+		data.Material = material;
+		data.SubmeshIndex = i;
+		data.Transform = transform;
+	}
 }
 
 void SceneRenderer::SubmitSkinnedMesh(Ref<SkinnedMesh> mesh, const std::vector<Ref<Material>>& materials, const glm::mat4& transform, Ref<Animation> animation, float animationTime)
 {
-	auto& data = m_SkinnedMeshRenderData.emplace_back();
-	data.Mesh = mesh;
-	data.Materials = materials;
-	data.Transform = transform;
-	data.Animation = animation;
-	data.AnimationTime = animationTime;
+	auto& submeshes = mesh->GetSubmeshes();
+	for (uint32_t i = 0; i < submeshes.size(); i++)
+	{
+		CORE_VERIFY(submeshes[i].MaterialIndex < materials.size(), "Material index greater than material table size");
+		auto& material = materials[submeshes[i].MaterialIndex];
+
+		auto& data = material->Color.a == 1.0f ? m_OpaqueSkinnedMeshRenderData.emplace_back() : m_TransparentSkinnedMeshRenderData.emplace_back();
+		data.Mesh = mesh;
+		data.Material = material;
+		data.SubmeshIndex = i;
+		data.Animation = animation;
+		data.AnimationTime = animationTime;
+		data.Transform = transform;
+	}
 }
 

@@ -10,6 +10,7 @@ struct IOData
     const uint8_t* KeyboardState;
     int KeyCount;
     int MousePosX, MousePosY;
+    float MouseScroll = 0.0f;
     uint32_t PrevMouseState = 0, MouseState = 0;
     int WindowWidth = 0, WindowHeight = 0;
     bool IsWindowResized = false, IsWindowMinimized = false;
@@ -60,6 +61,11 @@ glm::vec2 IO::GetMousePosition()
     return { s_Data.MousePosX, s_Data.MousePosY };
 }
 
+float IO::GetMouseScroll()
+{
+    return s_Data.MouseScroll;
+}
+
 glm::vec2 IO::GetWindowSize()
 {
     return { s_Data.WindowWidth, s_Data.WindowHeight };
@@ -79,6 +85,9 @@ void IO::CacheLastFrameKeyboard()
 {
     memcpy(s_Data.PreviousKeyboardState, s_Data.KeyboardState, s_Data.KeyCount);
     s_Data.PrevMouseState = s_Data.MouseState;
+
+    // TODO : move or rename function
+    s_Data.MouseScroll = 0.0f;
 }
 
 void IO::PullData()
@@ -104,4 +113,9 @@ void IO::PullData()
     uint32_t flags = SDL_GetWindowFlags(Application::Get().GetWindow()->GetNativeWindow());
     s_Data.IsWindowMinimized = flags & SDL_WINDOW_MINIMIZED;
         
+}
+
+void IO::SetMouseWheel(float scroll)
+{
+    s_Data.MouseScroll = scroll;
 }

@@ -32,27 +32,27 @@ void Game::OnCreate()
 	for (int i = 0; i < 4; i++) {
 		towers[0][i] = new ArcherTower(m_Scene);
 		towers[0][i]->setPosition(glm::vec3(0, 0, i * 96));
-		towers[0][i]->setlevel(i, m_Scene);
+		towers[0][i]->setlevel(i + 1, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[1][i] = new BallistaTower(m_Scene);
 		towers[1][i]->setPosition(glm::vec3(96, 0, i * 96));
-		towers[1][i]->setlevel(i, m_Scene);
+		towers[1][i]->setlevel(i + 1, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[2][i] = new CannonTower(m_Scene);
 		towers[2][i]->setPosition(glm::vec3(2*96, 0, i * 96));
-		towers[2][i]->setlevel(i, m_Scene);
+		towers[2][i]->setlevel(i + 1, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[3][i] = new PoisonTower(m_Scene);
 		towers[3][i]->setPosition(glm::vec3(3*96, 0, i * 96));
-		towers[3][i]->setlevel(i, m_Scene);
+		towers[3][i]->setlevel(i + 1, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[4][i] = new WizardTower(m_Scene);
 		towers[4][i]->setPosition(glm::vec3(4 * 96, 0, i * 96));
-		towers[4][i]->setlevel(i, m_Scene);
+		towers[4][i]->setlevel(i + 1, m_Scene);
 	}
 	UpgradeTest = new WizardTower(m_Scene);
 	UpgradeTest->setPosition(glm::vec3(-1 * 96, 0, -1 * 96));
@@ -73,7 +73,7 @@ void Game::OnCreate()
 
 float speed = 70.0f;
 void Game::OnUpdate(float dt) // dt現在是正確的了!
-{	
+{
 	auto& cameraTransform = m_Camera.GetComponent<TransformComponent>();
 
 	// Mouse control

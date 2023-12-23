@@ -36,11 +36,12 @@ in vec3 normal;
 in vec2 texCoord;
 
 uniform sampler2D u_DiffuseTexture;
+uniform vec4 u_Color;
 
 
 void main()
 {
 	//fragColor = vec4(normal, 1.0f);
-	fragColor = texture(u_DiffuseTexture, texCoord);
+	fragColor = texture(u_DiffuseTexture, texCoord) * u_Color;
 	//fragColor = vec4(texCoord.x, texCoord.y, 0.0, 1.0);
 }
