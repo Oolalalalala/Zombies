@@ -16,14 +16,10 @@ Game::~Game()
 
 void Game::OnCreate()
 {
-#ifndef DISTRIBUTION
-	AssetManager::SetAssetDirectory("../Game/asset");
-#else
-	AssetManager::SetAssetDirectory("asset");
-#endif
 
 	// Create scene
 	m_Scene = CreateRef<Scene>("Demo");
+	AssetLibrary::Initialize(m_Scene);
 
 	// Default lookat block
 	PS = glm::ivec2(-1, -1);
@@ -182,6 +178,7 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 
 void Game::OnDestroy()
 {
+	AssetLibrary::ShutDown();
 }
 
 Entity Game::CreateCamera()
