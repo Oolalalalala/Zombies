@@ -1,5 +1,6 @@
 #include "Game.h"
-#include "Map.h"
+
+#include <iostream>
 
 int BlockStatus[51][51] = { 0 };
 
@@ -15,19 +16,27 @@ Game::~Game()
 
 void Game::OnCreate()
 {
+#ifndef DISTRIBUTION
+	AssetManager::SetAssetDirectory("../Game/asset");
+#else
+	AssetManager::SetAssetDirectory("asset");
+#endif
+
 	// Create scene
 	m_Scene = CreateRef<Scene>("Demo");
-	AssetLibrary::Initialize(m_Scene);
+
+	// Default lookat block
+	PS = glm::ivec2(-1, -1);
+	NS = PS;
 
 	// 簡易的示範程式碼，我把程式碼移到下面了，不然很亂
 	m_Camera = CreateCamera();
 	m_Text = CreateText(); // 創造2D文字的範例
-	
 	m_Music = CreateMusic();
 	m_Sound = CreateSound();
 
 	//create floor 51*51
-	Map map(m_Scene, 51);
+	m_map = new Map(m_Scene, 51);
 
 	for (int i = 0; i < 4; i++) {
 		towers[0][i] = new ArcherTower(m_Scene);
@@ -64,7 +73,7 @@ void Game::OnCreate()
 	//update MapStatus
 	for (int i = 0;i < 5;i++) {
 		for (int j = 0;j < 4;j++) {
-			map.UpdateMap(m_Scene, i, j, 1);//tower
+			m_map->UpdateMap(m_Scene, i, j, 1);//tower
 		}
 	}
 
@@ -115,8 +124,10 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 	
 	// Rotation to direction
 	glm::vec3 dir = glm::inverse(glm::toMat4(cameraTransform.Rotation)) * glm::vec4(0.f, 0.f, 1.f, 0.0f);
+	glm::vec3 lookat = dir;
 	dir.y = 0;
 	dir = glm::normalize(dir);
+	lookat = glm::normalize(lookat);
 
 	if (IO::IsKeyPressed(KeyCode::W))
 		cameraTransform.Position += speed * dir * dt;
@@ -130,6 +141,14 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 		cameraTransform.Position.y += speed * dt;
 	if (IO::IsKeyPressed(KeyCode::LeftShift))
 		cameraTransform.Position.y -= speed * dt;
+
+	// Detect which block is aiming
+	NS = m_map->FindFloor(lookat, cameraTransform.Position);
+	if (PS.x != -1 && PS != NS)
+		m_map->ChangeColor(m_Scene, PS.x, PS.y, m_map->mapinfo[PS.x][PS.y]);
+	PS = NS;
+	if (NS.x != -1)
+		m_map->ChangeColor(m_Scene, NS.x, NS.y, 2);
 	
 	// FPS counter
 	static float time = 0;
@@ -158,20 +177,11 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 		m_Sound.GetComponent<SoundSourceComponent>().Begin = true;
 
 
-	//static AnimationNode node();
-	//static Entity e = m_Scene->CreateEntity(""); // TODO : test animation node
-	//auto& sprite = e.AddComponent<SpriteRendererComponent>();
-	//sprite.Size = { 300, 200 };
-	//sprite.Color = { 1.0, 0.0,0.0,1.0 };
-
-
-
 	m_Scene->OnUpdate(dt); // Renders the scene
 }
 
 void Game::OnDestroy()
 {
-	AssetLibrary::ShutDown();
 }
 
 Entity Game::CreateCamera()
@@ -219,9 +229,6 @@ Entity Game::CreateSpriteWithTexture(const std::string& path)
 	UI.Pivot = { 0, 1 };
 	UI.Offset = { 0, -100 };
 
-	auto& button = quad.AddComponent<ButtonComponent>();
-	button.ButtonDownCallback = []() { TRACE("Button is pressed"); };
-
 	auto& transform = quad.GetComponent<TransformComponent>();
 	transform.Position = { -300, -300, 0 }; // 不會影響物體位置(被UIElementComponent覆蓋)
 
@@ -261,21 +268,14 @@ Entity Game::LoadModel()
 
 Entity Game::LoadModelWithTexture()
 {
-	//AssetHandle albedo = AssetManager::LoadTexture("Model/towers/texture/Texture_MAp_fortress_elves.png"); // albedo是最基礎的顏色
-	//AssetHandle albedo = AssetManager::LoadTexture("Model/dragon/textures/Dragon_Boss_05.png"); // albedo是最基礎的顏色
-	AssetHandle albedo = AssetManager::LoadTexture("Model/stormtrooper/textures/Stormtrooper_D.png"); // albedo是最基礎的顏色
+	AssetHandle albedo = AssetManager::LoadTexture("Model/towers/texture/Texture_MAp_fortress_elves.png"); // albedo是最基礎的顏色
 	AssetHandle mat1 = AssetManager::CreateMaterial(albedo); // 用texture產生material
 
-	//Entity model = Model::LoadSkinned(m_Scene, "Model/dragon/source/Dragon_Boss_05.fbx", { mat1 }); // 額外輸入material，有些模型需邀超過一個(Console會說)，要注意
-	Entity model = Model::LoadSkinned(m_Scene, "Model/stormtrooper/source/silly_dancing.fbx", { mat1 }); // 額外輸入material，有些模型需邀超過一個(Console會說)，要注意
+	Entity model = Model::Load(m_Scene, "Model/towers/fbx/Full/_archer_tower_LVL_4.fbx", { mat1 }); // 額外輸入material，有些模型需邀超過一個(Console會說)，要注意
 
 	auto& transform = model.GetComponent<TransformComponent>();
 	transform.Position.x = 100.f;
-	transform.Scale = glm::vec3(50.0f);
-
-	auto& animator = model.GetComponent<AnimatorComponent>();
-	animator.IsPlaying = true;
-	animator.AnimationIndex = 0;
+	transform.Scale = glm::vec3(0.1f);
 
 	return model;
 }
@@ -301,7 +301,7 @@ Entity Game::CreateText()
 	auto& UI = text.AddComponent<UIElementComponent>(); //加UIElementComponent讓物體變成2D的，物體位置由下面三行決定，Transform.Position沒用了
 	UI.Anchor = glm::vec2(-1.0f, -1.0f);
 	UI.Pivot = glm::vec2(-1.0f, -1.0f);
-	UI.Offset = glm::vec2(10.0f, 10.0f);
+	UI.Offset = glm::vec2(0.0f, 0.0f);
 
 	auto& textRenderer = text.AddComponent<TextRendererComponent>();
 	textRenderer.Text = "FPS:???";

@@ -41,10 +41,13 @@ private:
 	Entity m_Music;
 	Entity m_Sound;
 
+	Map* m_map;
+
 	Tower* towers[5][4];
 	Tower* UpgradeTest;
 	Warning* w;
-	Entity floor[51][51];
+	glm::ivec2 PS, NS;
+	//Entity floor[51][51];
 
 	//ArcherTower* a;
 	//BallistaTower* b;
