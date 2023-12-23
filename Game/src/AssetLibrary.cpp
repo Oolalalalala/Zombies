@@ -16,6 +16,8 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 
 	s_Assets[Asset::TowerTexture] = AssetManager::LoadTexture("Model/towers/texture/Texture_MAp_fortress_elves.png");
 	s_Assets[Asset::TowerMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::TowerTexture]);
+	s_Assets[Asset::TowerTransparentMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::TowerTexture]);
+	AssetManager::GetMaterial(s_Assets[Asset::TowerTransparentMaterial])->Color.a = 0.3f;
 
 	s_ModelPrefabs[Asset::ArcherTowerLevel1Model] = Model::Load(scene, "Model/towers/fbx/Full/_archer_tower_LVL_1.fbx", { s_Assets[Asset::TowerMaterial] });
 	s_ModelPrefabs[Asset::ArcherTowerLevel2Model] = Model::Load(scene, "Model/towers/fbx/Full/_archer_tower_LVL_2.fbx", { s_Assets[Asset::TowerMaterial] });

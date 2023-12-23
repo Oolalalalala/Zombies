@@ -8,6 +8,7 @@ enum class Asset
 	None = 0,
 	TowerTexture, // The texture of all towers
 	TowerMaterial, // The material of all towers
+	TowerTransparentMaterial, // Material for tower placing
 	ArcherTowerLevel1Model, ArcherTowerLevel2Model, ArcherTowerLevel3Model, ArcherTowerLevel4Model,
 	BallistaTowerLevel1Model, BallistaTowerLevel2Model, BallistaTowerLevel3Model, BallistaTowerLevel4Model,
 	CannonTowerLevel1Model, CannonTowerLevel2Model, CannonTowerLevel3Model, CannonTowerLevel4Model,

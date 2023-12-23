@@ -24,11 +24,15 @@ public:
 	static bool IsMouseButtonPressed(MouseButton button);
 	static bool IsMouseButtonReleased(MouseButton button);
 	static glm::vec2 GetMousePosition();
+	static float GetMouseScroll();
 	static glm::vec2 GetWindowSize();
 
 	static bool IsWindowResized();
 	static bool IsWindowMinimized();
 	
+	// Set by SDL
+public:
 	static void CacheLastFrameKeyboard();
 	static void PullData(); // Pull the data from SDL
+	static void SetMouseWheel(float scroll);
 };

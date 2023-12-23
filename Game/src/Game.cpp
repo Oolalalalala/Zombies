@@ -1,5 +1,6 @@
 #include "Game.h"
-#include "Map.h"
+
+#include <iostream>
 
 int BlockStatus[51][51] = { 0 };
 
@@ -15,43 +16,47 @@ Game::~Game()
 
 void Game::OnCreate()
 {
+
 	// Create scene
 	m_Scene = CreateRef<Scene>("Demo");
 	AssetLibrary::Initialize(m_Scene);
 
+	// Default lookat block
+	PS = glm::ivec2(-1, -1);
+	NS = PS;
+
 	// 簡易的示範程式碼，我把程式碼移到下面了，不然很亂
 	m_Camera = CreateCamera();
 	m_Text = CreateText(); // 創造2D文字的範例
-	
 	m_Music = CreateMusic();
 	m_Sound = CreateSound();
 
 	//create floor 51*51
-	Map map(m_Scene, 51);
+	m_map = new Map(m_Scene, 51);
 
 	for (int i = 0; i < 4; i++) {
 		towers[0][i] = new ArcherTower(m_Scene);
-		towers[0][i]->setPosition(glm::vec3(0, 0, i * 96));
+		towers[0][i]->setPosition(glm::vec3(1 * 96, 0, i * 96 + 96));
 		towers[0][i]->setlevel(i, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[1][i] = new BallistaTower(m_Scene);
-		towers[1][i]->setPosition(glm::vec3(96, 0, i * 96));
+		towers[1][i]->setPosition(glm::vec3(2 * 96, 0, i * 96 + 96));
 		towers[1][i]->setlevel(i, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[2][i] = new CannonTower(m_Scene);
-		towers[2][i]->setPosition(glm::vec3(2*96, 0, i * 96));
+		towers[2][i]->setPosition(glm::vec3(3 * 96, 0, i * 96 + 96));
 		towers[2][i]->setlevel(i, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[3][i] = new PoisonTower(m_Scene);
-		towers[3][i]->setPosition(glm::vec3(3*96, 0, i * 96));
+		towers[3][i]->setPosition(glm::vec3(4 * 96, 0, i * 96 + 96));
 		towers[3][i]->setlevel(i, m_Scene);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[4][i] = new WizardTower(m_Scene);
-		towers[4][i]->setPosition(glm::vec3(4 * 96, 0, i * 96));
+		towers[4][i]->setPosition(glm::vec3(5 * 96, 0, i * 96 + 96));
 		towers[4][i]->setlevel(i, m_Scene);
 	}
 	UpgradeTest = new WizardTower(m_Scene);
@@ -62,9 +67,9 @@ void Game::OnCreate()
 
 
 	//update MapStatus
-	for (int i = 0;i < 5;i++) {
-		for (int j = 0;j < 4;j++) {
-			map.UpdateMap(m_Scene, i, j, 1);//tower
+	for (int i = 1;i < 6;i++) {
+		for (int j = 1;j < 5;j++) {
+			m_map->ChangeColor(m_Scene, i, j, 1);//tower
 		}
 	}
 
@@ -75,7 +80,7 @@ void Game::OnCreate()
 
 float speed = 70.0f;
 void Game::OnUpdate(float dt) // dt現在是正確的了!
-{	
+{
 	auto& cameraTransform = m_Camera.GetComponent<TransformComponent>();
 
 	// Mouse control
@@ -113,12 +118,15 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 	}
 	if (IO::IsKeyDown(KeyCode::F))speed = (speed == 700.f) ? 700.0f : speed + 70.0f;
 	if (IO::IsKeyDown(KeyCode::V))speed = 70.0f;
+	if (IO::IsKeyDown(KeyCode::L))m_map->DecidePath(m_Scene);
 		
 	
 	// Rotation to direction
 	glm::vec3 dir = glm::inverse(glm::toMat4(cameraTransform.Rotation)) * glm::vec4(0.f, 0.f, 1.f, 0.0f);
+	glm::vec3 lookat = dir;
 	dir.y = 0;
 	dir = glm::normalize(dir);
+	lookat = glm::normalize(lookat);
 
 	if (IO::IsKeyPressed(KeyCode::W))
 		cameraTransform.Position += speed * dir * dt;
@@ -132,6 +140,14 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 		cameraTransform.Position.y += speed * dt;
 	if (IO::IsKeyPressed(KeyCode::LeftShift))
 		cameraTransform.Position.y -= speed * dt;
+
+	// Detect which block is aiming
+	NS = m_map->FindFloor(lookat, cameraTransform.Position);
+	if (PS.x != -1 && PS != NS)
+		m_map->ChangeColor(m_Scene, PS.x, PS.y, m_map->mapinfo[PS.x][PS.y]);
+	PS = NS;
+	if (NS.x != -1)
+		m_map->ChangeColor(m_Scene, NS.x, NS.y, 2);
 	
 	// FPS counter
 	static float time = 0;
@@ -158,14 +174,6 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 
 	if (IO::IsKeyReleased(KeyCode::R))
 		m_Sound.GetComponent<SoundSourceComponent>().Begin = true;
-
-
-	//static AnimationNode node();
-	//static Entity e = m_Scene->CreateEntity(""); // TODO : test animation node
-	//auto& sprite = e.AddComponent<SpriteRendererComponent>();
-	//sprite.Size = { 300, 200 };
-	//sprite.Color = { 1.0, 0.0,0.0,1.0 };
-
 
 
 	m_Scene->OnUpdate(dt); // Renders the scene
@@ -263,12 +271,9 @@ Entity Game::LoadModel()
 
 Entity Game::LoadModelWithTexture()
 {
-	//AssetHandle albedo = AssetManager::LoadTexture("Model/towers/texture/Texture_MAp_fortress_elves.png"); // albedo是最基礎的顏色
-	//AssetHandle albedo = AssetManager::LoadTexture("Model/dragon/textures/Dragon_Boss_05.png"); // albedo是最基礎的顏色
 	AssetHandle albedo = AssetManager::LoadTexture("Model/stormtrooper/textures/Stormtrooper_D.png"); // albedo是最基礎的顏色
 	AssetHandle mat1 = AssetManager::CreateMaterial(albedo); // 用texture產生material
 
-	//Entity model = Model::LoadSkinned(m_Scene, "Model/dragon/source/Dragon_Boss_05.fbx", { mat1 }); // 額外輸入material，有些模型需邀超過一個(Console會說)，要注意
 	Entity model = Model::LoadSkinned(m_Scene, "Model/stormtrooper/source/silly_dancing.fbx", { mat1 }); // 額外輸入material，有些模型需邀超過一個(Console會說)，要注意
 
 	auto& transform = model.GetComponent<TransformComponent>();
@@ -307,7 +312,7 @@ Entity Game::CreateText()
 
 	auto& textRenderer = text.AddComponent<TextRendererComponent>();
 	textRenderer.Text = "FPS:???";
-	textRenderer.Font = AssetManager::LoadFont("Fonts/OpenSans-Regular.ttf");
+	textRenderer.Font = AssetLibrary::Get(Asset::OpenSansFont);
 	textRenderer.FontSize = 20.0f;
 	textRenderer.Size = glm::vec2(200.0f, 100.0f);
 	textRenderer.OutlineColor = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);

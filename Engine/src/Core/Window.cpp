@@ -51,6 +51,9 @@ void Window::OnUpdate()
 	{
 		switch (e.type)
 		{
+		case SDL_MOUSEWHEEL:
+			IO::SetMouseWheel(e.wheel.preciseY);
+			break;
 		case SDL_QUIT:
 			Application::Get().Close();
 			break;
