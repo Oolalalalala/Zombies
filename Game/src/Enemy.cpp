@@ -1,9 +1,15 @@
 #include <Enemy.h>
 
-Enemy::Enemy(Ref<Scene> scene, double hp, double damage,const std::string& pp) {
-	_entity = Model::Load(scene, pp); // ¸ü¤J¼Ò«¬
+Enemy::Enemy(Ref<Scene> scene, double hp, double damage, Asset modelAsset) {
+	_entity = AssetLibrary::GetModel(modelAsset);
+	if (_entity.HasComponent<MeshRendererComponent>())
+		_entity.GetComponent<MeshRendererComponent>().Enabled = true;
+	if (_entity.HasComponent<SkinnedMeshRendererComponent>())
+		_entity.GetComponent<SkinnedMeshRendererComponent>().Enabled = true;
+
 	_hp = hp;
 	_damage = damage;
+	_velocity = glm::vec3(0,0,0);
 }
 Enemy::~Enemy(){
 }

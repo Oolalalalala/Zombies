@@ -68,7 +68,9 @@ void Game::OnCreate()
 		}
 	}
 
-	
+	bg=new BabyGrogu(m_Scene);
+	bg->setPosition(glm::vec3(-1 * 96, 0, -10 * 96));
+
 }
 
 float speed = 70.0f;

@@ -1,0 +1,11 @@
+Model Information:
+* title:	Baby Yoda Grogu with glasses
+* source:	https://sketchfab.com/3d-models/baby-yoda-grogu-with-glasses-c93731ce06154312bc7b4bf5c64d4e90
+* author:	iclartworks (https://sketchfab.com/iclartworks)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Baby Yoda Grogu with glasses" (https://sketchfab.com/3d-models/baby-yoda-grogu-with-glasses-c93731ce06154312bc7b4bf5c64d4e90) by iclartworks (https://sketchfab.com/iclartworks) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Engine.h"
-
+#include "AssetLibrary.h"
 class Enemy
 {
 public:
-	Enemy(Ref<Scene> scene, double hp, double damage, const std::string& pp);
+	Enemy(Ref<Scene> scene, double hp, double damage, Asset modelAsset);
 	~Enemy();
 	void setPosition(glm::vec3 position);
 	void Destroy(Ref<Scene> scene);

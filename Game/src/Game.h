@@ -1,7 +1,20 @@
 #pragma once
 
 #include "Engine.h"
+#include "Patrick.h"
+#include "WhiteChineseDragon.h"
+#include "SnowDragon.h"
+#include "ShadowDragon.h"
+#include "MonsterSkull.h"
 #include "Monster.h"
+#include "FantasyDragon.h"
+#include "BlueDragon.h"
+#include "BlueDragon.h"
+#include "BabyGrogu.h"
+
+
+
+
 #include "ArcherTower.h"
 #include "BallistaTower.h"
 #include "CannonTower.h"
@@ -51,6 +64,15 @@ private:
 	//CannonTower* c;
 	//PoisonTower* p;
 	//WizardTower* w;
+	Patrick* p;
+	WhiteChineseDragon* wcd; 
+	SnowDragon* snd;
+	ShadowDragon* shd;
+	MonsterSkull* ms;
+	Monster* m;
+	FantasyDragon* fd;
+	BlueDragon* bd;
+	BabyGrogu* bg;
 
 };
 

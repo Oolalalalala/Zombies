@@ -1,0 +1,11 @@
+Model Information:
+* title:	Spongebob SquarePants Patrick
+* source:	https://sketchfab.com/3d-models/spongebob-squarepants-patrick-101e88d1a7b04e98b1e7d9538152a37e
+* author:	JackTheOhio (https://sketchfab.com/ijackprovostjr)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Spongebob SquarePants Patrick" (https://sketchfab.com/3d-models/spongebob-squarepants-patrick-101e88d1a7b04e98b1e7d9538152a37e) by JackTheOhio (https://sketchfab.com/ijackprovostjr) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
