@@ -100,6 +100,8 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial4] = AssetManager::CreateMaterial(s_Assets[Asset::baby_yoda_grogu_with_glassesTexture4]);
 	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses] = Model::Load(scene, "Model/enemy/baby_yoda_grogu_with_glasses/untitled.dae", { s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial4],s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial2],s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial4],s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial1],s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial2] }); //1eye2hand3glasses4clothes5face
 	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<MeshRendererComponent>().Enabled = false;
+	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Scale *= 50.f;
+	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	//Model::LoadSkinned()
 	//SkinnedMeshRendererComponent
 
