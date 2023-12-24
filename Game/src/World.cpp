@@ -34,7 +34,7 @@ World::World()
 	NowBuilding->setlevel(0, m_Scene);
 	NowBuilding->Destroy(m_Scene);
 
-	bg = new BabyGrogu(m_Scene);
+	bg = new BabyGrogu(m_Scene, 1);
 	DefaultDir = bg->getRotation();
 	bg->setPosition(glm::vec3(96.f * 3, -8000, 96.f * 0));
 
@@ -581,10 +581,11 @@ Entity World::CreateMusic()
 {
 	Entity music = m_Scene->CreateEntity("Music");
 	auto& source = music.AddComponent<MusicSourceComponent>();
-	source.Music = AssetManager::LoadMusic("Sound/Free_Test_Data_1MB_MP3.mp3");
+	source.Music = AssetManager::LoadMusic("Sound/music.mp3");
 	source.Volume = 0.9f;
 	source.FadeIn = 2.0f;
 	source.FadeOut = 5.0f;
+	source.Begin = true;
 
 	return music;
 }

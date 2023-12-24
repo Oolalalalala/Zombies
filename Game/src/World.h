@@ -9,7 +9,6 @@
 #include "ShadowDragon.h"
 #include "MonsterSkull.h"
 #include "Monster.h"
-#include "FantasyDragon.h"
 #include "BlueDragon.h"
 #include "BlueDragon.h"
 #include "BabyGrogu.h"
@@ -77,7 +76,6 @@ private:
 	ShadowDragon* shd;
 	MonsterSkull* ms;
 	Monster* m;
-	FantasyDragon* fd;
 	BlueDragon* bd;
 	BabyGrogu* bg;
 

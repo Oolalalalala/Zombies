@@ -6,6 +6,7 @@ struct MageBallData
 	Enemy* Enemy;
 	glm::vec3 Velocity;
 	float AirTime = 0;
+	glm::vec3 FallbackPosition;
 };
 
 

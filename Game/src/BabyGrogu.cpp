@@ -1,6 +1,6 @@
 #include "BabyGrogu.h"
 
-BabyGrogu::BabyGrogu(Ref<Scene> scene)
-	: Enemy(scene, 100.0, 100.0, Asset::baby_yoda_grogu_with_glasses)
+BabyGrogu::BabyGrogu(Ref<Scene> scene,int level)
+	: Enemy(scene, level, Asset::baby_yoda_grogu_with_glasses)
 {
 }

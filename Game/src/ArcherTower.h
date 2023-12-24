@@ -1,6 +1,11 @@
 #pragma once
 #include "Tower.h"
 
+struct ArcherAttackTarget
+{
+	Enemy* Target;
+	glm::vec3 FallbackPosition;
+};
 
 class ArcherTower :public Tower
 {
@@ -16,7 +21,7 @@ protected:
 	void changeModel(Ref<Scene> scene);
 
 	std::vector<Enemy*> m_TargetList;
-	std::unordered_map<Entity, Enemy*> m_AttackList;
+	std::unordered_map<Entity, ArcherAttackTarget> m_AttackList;
 
 	float m_FireInterval = 0.7f;
 	float m_ArrowSpeed = 300.0f;

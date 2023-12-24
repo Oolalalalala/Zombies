@@ -1,5 +1,13 @@
 #pragma once
 #include "Tower.h"
+
+struct BallistaAttackTarget
+{
+	Enemy* Target;
+	glm::vec3 FallbackPosition;
+};
+
+
 class BallistaTower :public Tower
 {
 public:
@@ -14,7 +22,7 @@ protected:
 	void changeModel(Ref<Scene> scene);
 
 	std::vector<Enemy*> m_TargetList;
-	std::unordered_map<Entity, Enemy*> m_AttackList;
+	std::unordered_map<Entity, BallistaAttackTarget> m_AttackList;
 
 	float m_FireInterval = 0.15f;
 	float m_ArrowSpeed = 400.0f;

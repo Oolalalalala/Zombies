@@ -21,7 +21,7 @@ void CannonTower::OnUpdate(float dt)
 			auto& transform = cannonBall.GetComponent<TransformComponent>();
 			transform.Position = _entity.GetComponent<TransformComponent>().Position + s_AttackPointOffset;
 			cannonBall.GetComponent<MeshRendererComponent>().Enabled = true;
-			m_AttackList[cannonBall] = target;
+			m_AttackList[cannonBall].Target = target;
 		}
 	}
 	else
@@ -30,11 +30,11 @@ void CannonTower::OnUpdate(float dt)
 	for (auto it = m_AttackList.begin(); it != m_AttackList.end();)
 	{
 		Entity cannonBall = it->first;
-		Enemy* target = it->second;
+		Enemy* target = it->second.Target;
 
 		auto& transform = cannonBall.GetComponent<TransformComponent>();
 		glm::vec3& arrowPos = transform.Position;
-		glm::vec3 targetPos = target->getPosition();
+		glm::vec3 targetPos = target ? target->getPosition() : it->second.FallbackPosition;
 
 		glm::vec3 delta = targetPos - arrowPos;
 		glm::vec3 dir = glm::normalize(delta);
@@ -43,9 +43,10 @@ void CannonTower::OnUpdate(float dt)
 
 		arrowPos += dx;
 
-		if (glm::length2(delta) < 4 * m_CannonBallSpeed * m_CannonBallSpeed * dt * dt)
+		if (glm::length2(delta) < m_CannonBallSpeed * m_CannonBallSpeed * dt * dt)
 		{
-			target->takeDamage(_damage);
+			if (target)
+				target->takeDamage(_damage);
 			AssetLibrary::DestoryModel(cannonBall);
 			it = m_AttackList.erase(it);
 		}
@@ -63,13 +64,12 @@ void CannonTower::RemoveTrackingEnemy(Enemy* target)
 {
 	for (auto it = m_AttackList.begin(); it != m_AttackList.end();)
 	{
-		if (it->second == target)
+		if (it->second.Target == target)
 		{
-			AssetLibrary::DestoryModel(it->first);
-			it = m_AttackList.erase(it);
+			it->second.FallbackPosition = it->second.Target->getPosition();
+			it->second.Target = nullptr;
 		}
-		else
-			it++;
+		it++;
 	}
 
 	for (auto it = m_TargetList.begin(); it != m_TargetList.end(); it++)
