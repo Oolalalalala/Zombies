@@ -14,12 +14,12 @@ public:
 	Skeleton(const std::vector<Bone>& bones);
 	void SetBones(const std::vector<Bone>& bones);
 
-	void GetBoneTransforms(Ref<Animation> anination, float animationTime, Buffer<glm::mat4> buffer);
+	void GetBoneTransforms(Ref<Animation> anination, float animationTime, std::vector<glm::mat4>& buffer);
 	uint32_t GetBoneCount() { return m_Bones.size(); };
 
 private:
 	void FindRootBones();
-	void GetBoneTransformRecursive(Ref<Animation> animation, float animationTime, const glm::mat4& parentTransform, uint32_t boneIndex, Buffer<glm::mat4> buffer);
+	void GetBoneTransformRecursive(Ref<Animation> animation, float animationTime, const glm::mat4& parentTransform, uint32_t boneIndex, std::vector<glm::mat4>& buffer);
 
 private:
 	std::vector<Bone> m_Bones;

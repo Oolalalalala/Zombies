@@ -31,6 +31,10 @@ void Game::OnCreate()
 	m_Music = CreateMusic();
 	m_Sound = CreateSound();
 
+	
+	bg=new BabyGrogu(m_Scene);
+	bg->setPosition(glm::vec3(-1 * 96, 0, -10 * 96));
+
 	//create floor 51*51
 	m_map = new Map(m_Scene, 51);
 
@@ -38,16 +42,19 @@ void Game::OnCreate()
 		towers[0][i] = new ArcherTower(m_Scene);
 		towers[0][i]->setPosition(glm::vec3(1 * 96, 0, i * 96 + 96));
 		towers[0][i]->setlevel(i, m_Scene);
+		towers[0][i]->AddToTargetList(bg);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[1][i] = new BallistaTower(m_Scene);
 		towers[1][i]->setPosition(glm::vec3(2 * 96, 0, i * 96 + 96));
 		towers[1][i]->setlevel(i, m_Scene);
+		towers[1][i]->AddToTargetList(bg);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[2][i] = new CannonTower(m_Scene);
 		towers[2][i]->setPosition(glm::vec3(3 * 96, 0, i * 96 + 96));
 		towers[2][i]->setlevel(i, m_Scene);
+		towers[2][i]->AddToTargetList(bg);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[3][i] = new PoisonTower(m_Scene);
@@ -72,9 +79,6 @@ void Game::OnCreate()
 			m_map->ChangeColor(m_Scene, i, j, 1);//tower
 		}
 	}
-
-	bg=new BabyGrogu(m_Scene);
-	bg->setPosition(glm::vec3(-1 * 96, 0, -10 * 96));
 
 }
 
@@ -119,7 +123,14 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 	if (IO::IsKeyDown(KeyCode::F))speed = (speed == 700.f) ? 700.0f : speed + 70.0f;
 	if (IO::IsKeyDown(KeyCode::V))speed = 70.0f;
 	if (IO::IsKeyDown(KeyCode::L))m_map->DecidePath(m_Scene);
-		
+
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 5; j++)
+		{
+			towers[i][j]->OnUpdate(dt);
+		}
+	}
 	
 	// Rotation to direction
 	glm::vec3 dir = glm::inverse(glm::toMat4(cameraTransform.Rotation)) * glm::vec4(0.f, 0.f, 1.f, 0.0f);

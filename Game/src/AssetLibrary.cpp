@@ -102,6 +102,23 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<MeshRendererComponent>().Enabled = false;
 	//Model::LoadSkinned()
 	//SkinnedMeshRendererComponent
+
+
+
+	s_Assets[Asset::ArrowTexture] = AssetManager::LoadTexture("Model/weapons/arrow/textures/Material.001_Base_Color_1001.png");
+	s_Assets[Asset::ArrowMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::ArrowTexture]);
+	s_ModelPrefabs[Asset::ArrowModel] = Model::Load(scene, "Model/weapons/arrow/source/Arrow.fbx", { s_Assets[Asset::ArrowMaterial] });
+	s_ModelPrefabs[Asset::ArrowModel].GetComponent<MeshRendererComponent>().Enabled = false;
+	s_ModelPrefabs[Asset::ArrowModel].GetComponent<TransformComponent>().Scale = glm::vec3(300.0f, 100.0f, 300.0f);
+
+
+	s_Assets[Asset::CannonBallTexture] = AssetManager::LoadTexture("Model/weapons/cannonball/textures/Bomba_Base_Color.png");
+	s_Assets[Asset::CannonBallMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::CannonBallTexture]);
+	s_ModelPrefabs[Asset::CannonBallModel] = Model::Load(scene, "Model/weapons/cannonball/source/Bomba.fbx", { s_Assets[Asset::CannonBallMaterial] });
+	s_ModelPrefabs[Asset::CannonBallModel].GetComponent<MeshRendererComponent>().Enabled = false;
+	s_ModelPrefabs[Asset::CannonBallModel].GetComponent<TransformComponent>().Scale *= 2.0f;
+
+
 	for (int i = (int)Asset::ArcherTowerLevel1Model; i <= (int)Asset::WizardTowerLevel4Model; i++)
 	{
 		s_ModelPrefabs[(Asset)i].GetComponent<MeshRendererComponent>().Enabled = false;
@@ -130,6 +147,11 @@ void AssetLibrary::ShutDown()
 AssetHandle AssetLibrary::Get(Asset asset)
 {
 	return s_Assets[asset];
+}
+
+void AssetLibrary::DestoryModel(Entity model)
+{
+	s_Scene->DestroyEntity(model);
 }
 
 Entity AssetLibrary::GetModel(Asset asset)
