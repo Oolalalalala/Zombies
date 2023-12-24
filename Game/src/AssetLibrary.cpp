@@ -116,7 +116,19 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	s_Assets[Asset::CannonBallMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::CannonBallTexture]);
 	s_ModelPrefabs[Asset::CannonBallModel] = Model::Load(scene, "Model/weapons/cannonball/source/Bomba.fbx", { s_Assets[Asset::CannonBallMaterial] });
 	s_ModelPrefabs[Asset::CannonBallModel].GetComponent<MeshRendererComponent>().Enabled = false;
-	s_ModelPrefabs[Asset::CannonBallModel].GetComponent<TransformComponent>().Scale *= 2.0f;
+	s_ModelPrefabs[Asset::CannonBallModel].GetComponent<TransformComponent>().Scale *= 0.01f;
+
+
+	s_Assets[Asset::MageBallTexture] = AssetManager::LoadTexture("Model/weapons/cannonball/textures/Bomba_Base_Color.png");
+	s_Assets[Asset::MageBallMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::MageBallTexture]);
+	s_ModelPrefabs[Asset::MageBallModel] = Model::Load(scene, "Model/weapons/cannonball/source/Bomba.fbx", { s_Assets[Asset::MageBallMaterial] });
+	s_ModelPrefabs[Asset::MageBallModel].GetComponent<MeshRendererComponent>().Enabled = false;
+	s_ModelPrefabs[Asset::MageBallModel].GetComponent<TransformComponent>().Scale *= 0.01f;
+	
+	s_Assets[Asset::LightBeamTexture] = AssetManager::LoadTexture("Model/weapons/lightbeam/base_color.png");
+	s_Assets[Asset::LightBeamMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::LightBeamTexture]);
+	s_ModelPrefabs[Asset::LightBeamModel] = Model::Load(scene, "Model/weapons/lightbeam/light_beam.fbx", { s_Assets[Asset::LightBeamMaterial] });
+	s_ModelPrefabs[Asset::LightBeamModel].GetComponent<MeshRendererComponent>().Enabled = false;
 
 
 	for (int i = (int)Asset::ArcherTowerLevel1Model; i <= (int)Asset::WizardTowerLevel4Model; i++)

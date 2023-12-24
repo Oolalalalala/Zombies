@@ -20,7 +20,6 @@ void CannonTower::OnUpdate(float dt)
 			Entity cannonBall = AssetLibrary::GetModel(Asset::CannonBallModel);
 			auto& transform = cannonBall.GetComponent<TransformComponent>();
 			transform.Position = _entity.GetComponent<TransformComponent>().Position + s_AttackPointOffset;
-			transform.Scale *= 0.005f;
 			cannonBall.GetComponent<MeshRendererComponent>().Enabled = true;
 			m_AttackList[cannonBall] = target;
 		}
@@ -40,11 +39,11 @@ void CannonTower::OnUpdate(float dt)
 		glm::vec3 delta = targetPos - arrowPos;
 		glm::vec3 dir = glm::normalize(delta);
 
-		glm::vec3 dx = dir * m_ArrowSpeed * dt;
+		glm::vec3 dx = dir * m_CannonBallSpeed * dt;
 
 		arrowPos += dx;
 
-		if (glm::length2(delta) < m_ArrowSpeed * m_ArrowSpeed * dt * dt)
+		if (glm::length2(delta) < 4 * m_CannonBallSpeed * m_CannonBallSpeed * dt * dt)
 		{
 			target->takeDamage(_damage);
 			AssetLibrary::DestoryModel(cannonBall);
@@ -55,17 +54,18 @@ void CannonTower::OnUpdate(float dt)
 	}
 }
 
-void CannonTower::AddToTargetList(Enemy* target)
+void CannonTower::AddTrackingEnemy(Enemy* target)
 {
 	m_TargetList.push_back(target);
 }
 
-void CannonTower::RemoveFromTargetList(Enemy* target)
+void CannonTower::RemoveTrackingEnemy(Enemy* target)
 {
 	for (auto it = m_AttackList.begin(); it != m_AttackList.end();)
 	{
 		if (it->second == target)
 		{
+			AssetLibrary::DestoryModel(it->first);
 			it = m_AttackList.erase(it);
 		}
 		else

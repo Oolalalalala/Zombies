@@ -37,6 +37,8 @@ enum class Asset
 
 	ArrowTexture, ArrowMaterial, ArrowModel,
 	CannonBallTexture, CannonBallMaterial, CannonBallModel,
+	MageBallTexture, MageBallMaterial, MageBallModel,
+	LightBeamTexture, LightBeamMaterial, LightBeamModel,
 
 	OpenSansFont
 };

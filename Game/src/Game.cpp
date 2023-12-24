@@ -13,6 +13,8 @@ Game::Game()
 Game::~Game()
 {
 }
+	
+static BabyGrogu* bgs[5];
 
 void Game::OnCreate()
 {
@@ -31,9 +33,12 @@ void Game::OnCreate()
 	m_Music = CreateMusic();
 	m_Sound = CreateSound();
 
-	
-	bg=new BabyGrogu(m_Scene);
-	bg->setPosition(glm::vec3(-1 * 96, 0, -10 * 96));
+
+	for (int i = 0; i < 5; i++)
+	{
+		bgs[i] = new BabyGrogu(m_Scene);
+		bgs[i]->setPosition(glm::vec3(-96, 0, -i * 96 * 2));
+	}
 
 	//create floor 51*51
 	m_map = new Map(m_Scene, 51);
@@ -42,29 +47,36 @@ void Game::OnCreate()
 		towers[0][i] = new ArcherTower(m_Scene);
 		towers[0][i]->setPosition(glm::vec3(1 * 96, 0, i * 96 + 96));
 		towers[0][i]->setlevel(i, m_Scene);
-		towers[0][i]->AddToTargetList(bg);
+		for (int j = 0; j < 5; j++)
+		towers[0][i]->AddTrackingEnemy(bgs[j]);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[1][i] = new BallistaTower(m_Scene);
 		towers[1][i]->setPosition(glm::vec3(2 * 96, 0, i * 96 + 96));
 		towers[1][i]->setlevel(i, m_Scene);
-		towers[1][i]->AddToTargetList(bg);
+		for (int j = 0; j < 5; j++)
+		towers[1][i]->AddTrackingEnemy(bgs[j]);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[2][i] = new CannonTower(m_Scene);
 		towers[2][i]->setPosition(glm::vec3(3 * 96, 0, i * 96 + 96));
 		towers[2][i]->setlevel(i, m_Scene);
-		towers[2][i]->AddToTargetList(bg);
+		for (int j = 0; j < 5; j++)
+		towers[2][i]->AddTrackingEnemy(bgs[j]);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[3][i] = new PoisonTower(m_Scene);
 		towers[3][i]->setPosition(glm::vec3(4 * 96, 0, i * 96 + 96));
 		towers[3][i]->setlevel(i, m_Scene);
+		for (int j = 0; j < 5; j++)
+		towers[3][i]->AddTrackingEnemy(bgs[j]);
 	}
 	for (int i = 0; i < 4; i++) {
 		towers[4][i] = new WizardTower(m_Scene);
 		towers[4][i]->setPosition(glm::vec3(5 * 96, 0, i * 96 + 96));
 		towers[4][i]->setlevel(i, m_Scene);
+		for (int j = 0; j < 5; j++)
+		towers[4][i]->AddTrackingEnemy(bgs[j]);
 	}
 	UpgradeTest = new WizardTower(m_Scene);
 	UpgradeTest->setPosition(glm::vec3(-1 * 96, 0, -1 * 96));
@@ -82,7 +94,7 @@ void Game::OnCreate()
 
 }
 
-float speed = 70.0f;
+float speed = 700.0f;
 void Game::OnUpdate(float dt) // dt現在是正確的了!
 {
 	auto& cameraTransform = m_Camera.GetComponent<TransformComponent>();
@@ -120,16 +132,34 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 		}
 		UpgradeTest->setlevel(lvl + 1, m_Scene);
 	}
-	if (IO::IsKeyDown(KeyCode::F))speed = (speed == 700.f) ? 700.0f : speed + 70.0f;
-	if (IO::IsKeyDown(KeyCode::V))speed = 70.0f;
+
 	if (IO::IsKeyDown(KeyCode::L))m_map->DecidePath(m_Scene);
 
+	static int k = 0;
 	for (int i = 0; i < 5; i++)
 	{
 		for (int j = 0; j < 5; j++)
 		{
 			towers[i][j]->OnUpdate(dt);
+			if (IO::IsKeyDown(KeyCode::X))
+			{
+				towers[i][j]->RemoveTrackingEnemy(bgs[k]);
+			}
 		}
+	}
+	if (IO::IsKeyDown(KeyCode::X))
+	{
+		
+				k++;
+				k = std::min(k, 4);
+	}
+
+	for (int i = 0; i < 5; i++)
+	{
+	glm::vec3 pos = bgs[i]->getPosition();
+	pos.z += 50 * dt;
+	bgs[i]->setPosition(pos);
+
 	}
 	
 	// Rotation to direction
@@ -172,21 +202,6 @@ void Game::OnUpdate(float dt) // dt現在是正確的了!
 		time -= 1.0f;
 		cnt = 0;
 	}
-
-	static bool isMusicPlaying = false;
-	if (IO::IsKeyDown(KeyCode::M))
-	{
-		if (isMusicPlaying)
-			m_Music.GetComponent<MusicSourceComponent>().Stop = true;
-		else
-			m_Music.GetComponent<MusicSourceComponent>().Begin = true;
-		isMusicPlaying = !isMusicPlaying;
-	}
-
-	if (IO::IsKeyReleased(KeyCode::R))
-		m_Sound.GetComponent<SoundSourceComponent>().Begin = true;
-
-
 	m_Scene->OnUpdate(dt); // Renders the scene
 }
 

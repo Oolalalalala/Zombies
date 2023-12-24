@@ -1,9 +1,9 @@
 #include "BallistaTower.h"
 
-
 #include "glm/gtx/rotate_vector.hpp"
 
-const glm::vec3 BallistaTower::s_AttackPointOffset = glm::vec3(0.0f, 155.0f, 0.0f);
+
+const glm::vec3 BallistaTower::s_AttackPointOffset = glm::vec3(0.0f, 150.0f, 0.0f);
 
 BallistaTower::BallistaTower(Ref<Scene> scene)
 	:Tower(scene, 100.0, 100.0, Asset::BallistaTowerLevel1Model)
@@ -51,7 +51,7 @@ void BallistaTower::OnUpdate(float dt)
 
 		arrowPos += dx;
 
-		if (glm::length2(delta) < m_ArrowSpeed * m_ArrowSpeed * dt * dt)
+		if (glm::length2(delta) < 4 * m_ArrowSpeed * m_ArrowSpeed * dt * dt)
 		{
 			target->takeDamage(_damage);
 			AssetLibrary::DestoryModel(arrow);
@@ -62,17 +62,18 @@ void BallistaTower::OnUpdate(float dt)
 	}
 }
 
-void BallistaTower::AddToTargetList(Enemy* target)
+void BallistaTower::AddTrackingEnemy(Enemy* target)
 {
 	m_TargetList.push_back(target);
 }
 
-void BallistaTower::RemoveFromTargetList(Enemy* target)
+void BallistaTower::RemoveTrackingEnemy(Enemy* target)
 {
 	for (auto it = m_AttackList.begin(); it != m_AttackList.end();)
 	{
 		if (it->second == target)
 		{
+			AssetLibrary::DestoryModel(it->first);
 			it = m_AttackList.erase(it);
 		}
 		else

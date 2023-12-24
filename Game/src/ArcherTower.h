@@ -9,8 +9,8 @@ public:
 	ArcherTower(Ref<Scene> scene);
 
 	void OnUpdate(float dt) override;
-	void AddToTargetList(Enemy* target) override;
-	void RemoveFromTargetList(Enemy* target) override;
+	void AddTrackingEnemy(Enemy* target) override;
+	void RemoveTrackingEnemy(Enemy* target) override;
 
 protected:
 	void changeModel(Ref<Scene> scene);

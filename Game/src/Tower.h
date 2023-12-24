@@ -21,8 +21,8 @@ public:
 	double getLevel();
 
 	virtual void OnUpdate(float dt) {};
-	virtual void AddToTargetList(Enemy* target) {};
-	virtual void RemoveFromTargetList(Enemy* target) {};
+	virtual void AddTrackingEnemy(Enemy* target) {};
+	virtual void RemoveTrackingEnemy(Enemy* target) {};
 
 protected:
 	double _hp, _damage;
