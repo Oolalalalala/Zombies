@@ -63,5 +63,5 @@ private:
 	std::vector<SkinnedMeshRenderData> m_OpaqueSkinnedMeshRenderData;
 	std::vector<SkinnedMeshRenderData> m_TransparentSkinnedMeshRenderData;
 
-	Buffer<glm::mat4> m_BoneTransformBuffer;
+	std::vector<glm::mat4> m_BoneTransformBuffer;
 };

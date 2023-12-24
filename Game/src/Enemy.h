@@ -7,6 +7,8 @@ class Enemy
 public:
 	Enemy(Ref<Scene> scene, double hp, double damage, Asset modelAsset);
 	~Enemy();
+	glm::vec3 getPosition();
+	glm::quat getRotation();
 	void setPosition(glm::vec3 position);
 	void Destroy(Ref<Scene> scene);
 	void setRotation(glm::quat rotation);

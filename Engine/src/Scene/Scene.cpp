@@ -75,6 +75,10 @@ void Scene::OnUpdate(float dt)
 	//
 	//
 	//fb->Bind();
+	if (IO::IsWindowResized)
+	{
+		RendererAPI::SetViewport(0, 0, windowSize.x, windowSize.y);
+	}
 	RendererAPI::SetClearColor(glm::vec4(0.5f));
 	RendererAPI::Clear();
 

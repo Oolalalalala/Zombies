@@ -14,9 +14,9 @@ void Skeleton::SetBones(const std::vector<Bone>& bones)
 	FindRootBones();
 }
 
-void Skeleton::GetBoneTransforms(Ref<Animation> animation, float animationTime, Buffer<glm::mat4> buffer)
+void Skeleton::GetBoneTransforms(Ref<Animation> animation, float animationTime, std::vector<glm::mat4>& buffer)
 {
-	CORE_VERIFY(buffer.Count >= m_Bones.size(), "Buffer not large enough to load all transform for animation");
+	CORE_VERIFY(buffer.size() >= m_Bones.size(), "Buffer not large enough to load all transform for animation");
 
     animationTime = fmod(animationTime, animation->Length);
 
@@ -49,7 +49,7 @@ void Skeleton::FindRootBones()
     CORE_VERIFY(m_RootBoneIndices.size(), "No root bone is found");
 }
 
-void Skeleton::GetBoneTransformRecursive(Ref<Animation> animation, float animationTime, const glm::mat4& parentTransform, uint32_t boneIndex, Buffer<glm::mat4> buffer)
+void Skeleton::GetBoneTransformRecursive(Ref<Animation> animation, float animationTime, const glm::mat4& parentTransform, uint32_t boneIndex, std::vector<glm::mat4>& buffer)
 {
     buffer[boneIndex] = parentTransform * animation->Nodes[boneIndex].GetLocalTransform(animationTime);
 

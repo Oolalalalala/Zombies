@@ -19,9 +19,6 @@ void Tower::Destroy(Ref<Scene> scene)
 	}
 }
 
-
-
-
 void Tower::setPosition(glm::vec3 position)
 {
 	auto& transform = _entity.GetComponent<TransformComponent>();
@@ -31,10 +28,6 @@ void Tower::setRotation(glm::quat rotation)
 {
 	auto& transform = _entity.GetComponent<TransformComponent>();
 	transform.Rotation = rotation;
-}
-void Tower::update(float dt)
-{
-
 }
 void Tower::takeDamage(double D)
 {
