@@ -121,9 +121,9 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	s_ModelPrefabs[Asset::CannonBallModel].GetComponent<TransformComponent>().Scale *= 0.01f;
 
 
-	s_Assets[Asset::MageBallTexture] = AssetManager::LoadTexture("Model/weapons/cannonball/textures/Bomba_Base_Color.png");
+	s_Assets[Asset::MageBallTexture] = AssetManager::LoadTexture("Model/weapons/mageball/BaseColor.png");
 	s_Assets[Asset::MageBallMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::MageBallTexture]);
-	s_ModelPrefabs[Asset::MageBallModel] = Model::Load(scene, "Model/weapons/cannonball/source/Bomba.fbx", { s_Assets[Asset::MageBallMaterial] });
+	s_ModelPrefabs[Asset::MageBallModel] = Model::Load(scene, "Model/weapons/mageball/mageBall.fbx", { s_Assets[Asset::MageBallMaterial] });
 	s_ModelPrefabs[Asset::MageBallModel].GetComponent<MeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::MageBallModel].GetComponent<TransformComponent>().Scale *= 0.01f;
 	

@@ -43,18 +43,15 @@ void Map::ChangeColor(Ref<Scene> scene, int i, int j, int status) {
 }
 
 glm::ivec2 Map::FindFloor(glm::vec3 lookat, glm::vec3 pos) {
-	glm::ivec2 ans(-1,-1);
 
-	bool in_range = 1;
-	glm::vec3 FloorPos = pos;
-	while (in_range == 1) {
-		FloorPos += lookat;
-		if (FloorPos.z > 4896.f || FloorPos.z < 0 || FloorPos.x>4896 || FloorPos.x < 0 || FloorPos.y > 100000)
-			in_range = 0;
-		if (FloorPos.y < 0)break;
-	}
-	if (in_range == 0)return ans;
-	return Pos2Map(FloorPos);
+	if (lookat.y > -0.05)
+		return glm::ivec2(-1);
+
+	glm::ivec2 grid = Pos2Map(pos - lookat / lookat.y * pos.y);
+	if (grid.x >= 51 || grid.y >= 51 || grid.x < 0 || grid.y < 0)
+		return glm::ivec2(-1);
+
+	return grid;
 }
 
 glm::ivec2 Map::Pos2Map(glm::vec3 pos)

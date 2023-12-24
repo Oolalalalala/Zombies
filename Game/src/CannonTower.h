@@ -1,5 +1,12 @@
 #pragma once
 #include "Tower.h"
+
+struct CannonAttackTarget
+{
+	Enemy* Target;
+	glm::vec3 FallbackPosition;
+};
+
 class CannonTower :public Tower
 {
 public:
@@ -14,7 +21,7 @@ protected:
 	void changeModel(Ref<Scene> scene);
 
 	std::vector<Enemy*> m_TargetList;
-	std::unordered_map<Entity, Enemy*> m_AttackList;
+	std::unordered_map<Entity, CannonAttackTarget> m_AttackList;
 
 	float m_FireInterval = 0.7f;
 	float m_CannonBallSpeed = 300.0f;

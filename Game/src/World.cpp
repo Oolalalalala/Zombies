@@ -517,10 +517,11 @@ Entity World::CreateMusic()
 {
 	Entity music = m_Scene->CreateEntity("Music");
 	auto& source = music.AddComponent<MusicSourceComponent>();
-	source.Music = AssetManager::LoadMusic("Sound/Free_Test_Data_1MB_MP3.mp3");
+	source.Music = AssetManager::LoadMusic("Sound/music.mp3");
 	source.Volume = 0.9f;
 	source.FadeIn = 2.0f;
 	source.FadeOut = 5.0f;
+	source.Begin = true;
 
 	return music;
 }

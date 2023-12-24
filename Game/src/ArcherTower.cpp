@@ -25,7 +25,7 @@ void ArcherTower::OnUpdate(float dt)
 			transform.Position = _entity.GetComponent<TransformComponent>().Position + s_AttackPointOffset;
 			transform.Scale *= 0.5f;
 			arrow.GetComponent<MeshRendererComponent>().Enabled = true;
-			m_AttackList[arrow] = target;
+			m_AttackList[arrow].Target = target;
 		}
 	}
 	else
@@ -34,11 +34,12 @@ void ArcherTower::OnUpdate(float dt)
 	for (auto it = m_AttackList.begin(); it != m_AttackList.end();)
 	{
 		Entity arrow = it->first;
-		Enemy* target = it->second;
+		Enemy* target = it->second.Target;
+
 
 		auto& transform = arrow.GetComponent<TransformComponent>();
 		glm::vec3& arrowPos = transform.Position;
-		glm::vec3 targetPos = target->getPosition();
+		glm::vec3 targetPos = target ? target->getPosition() : it->second.FallbackPosition;
 
 		glm::vec3 delta = targetPos - arrowPos;
 		glm::vec3 dir = glm::normalize(delta);
@@ -49,9 +50,11 @@ void ArcherTower::OnUpdate(float dt)
 
 		arrowPos += dx;
 
-		if (glm::length2(delta) < 4 * m_ArrowSpeed * m_ArrowSpeed * dt * dt)
+		if (glm::length2(delta) < m_ArrowSpeed * m_ArrowSpeed * dt * dt)
 		{
-			target->takeDamage(_damage);
+			if (target)
+				target->takeDamage(_damage);
+
 			AssetLibrary::DestoryModel(arrow);
 			it = m_AttackList.erase(it);
 		}
@@ -69,13 +72,12 @@ void ArcherTower::RemoveTrackingEnemy(Enemy* target)
 {
 	for (auto it = m_AttackList.begin(); it != m_AttackList.end();)
 	{
-		if (it->second == target)
+		if (it->second.Target == target)
 		{
-			AssetLibrary::DestoryModel(it->first);
-			it = m_AttackList.erase(it);
+			it->second.FallbackPosition = it->second.Target->getPosition();
+			it->second.Target = nullptr;
 		}
-		else
-			it++;
+		it++;
 	}
 
 	for (auto it = m_TargetList.begin(); it != m_TargetList.end(); it++)

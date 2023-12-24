@@ -28,7 +28,7 @@ void PoisonTower::OnUpdate(float dt)
 			glm::vec3 initialVelocity = glm::ballRand(1.0f);
 			initialVelocity.y = glm::abs(initialVelocity.y);
 			initialVelocity = glm::normalize(initialVelocity) * m_MageBallInitailSpeed;
-			m_AttackList[mageBall] = { target, initialVelocity };
+			m_AttackList[mageBall] = { target, initialVelocity, 0, glm::vec3(0.0f) };
 		}
 	}
 	else
@@ -37,12 +37,12 @@ void PoisonTower::OnUpdate(float dt)
 	for (auto it = m_AttackList.begin(); it != m_AttackList.end();)
 	{
 		Entity mageBall = it->first;
-		auto& [target, velocity, airTime] = it->second;
+		auto& [target, velocity, airTime, fallbackPos] = it->second;
 		airTime += dt;
 
 		auto& transform = mageBall.GetComponent<TransformComponent>();
 		glm::vec3& ballPos = transform.Position;
-		glm::vec3 targetPos = target->getPosition();
+		glm::vec3 targetPos = target ? target->getPosition() : fallbackPos;
 
 		glm::vec3 delta = targetPos - ballPos;
 		glm::vec3 dir = glm::normalize(delta);
@@ -57,9 +57,10 @@ void PoisonTower::OnUpdate(float dt)
 
 		ballPos += dx;
 
-		if (glm::length2(delta) < 4 * glm::length2(velocity) * dt)
+		if (glm::length2(delta) < glm::length2(velocity) * dt)
 		{
-			target->takeDamage(_damage);
+			if (target)
+				target->takeDamage(_damage);
 			AssetLibrary::DestoryModel(mageBall);
 			it = m_AttackList.erase(it);
 		}
@@ -79,11 +80,10 @@ void PoisonTower::RemoveTrackingEnemy(Enemy* target)
 	{
 		if (it->second.Enemy == target)
 		{
-			AssetLibrary::DestoryModel(it->first);
-			it = m_AttackList.erase(it);
+			it->second.FallbackPosition = it->second.Enemy->getPosition();
+			it->second.Enemy = nullptr;
 		}
-		else
-			it++;
+		it++;
 	}
 
 	for (auto it = m_TargetList.begin(); it != m_TargetList.end(); it++)
