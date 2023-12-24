@@ -4,5 +4,5 @@ class BabyGrogu :public Enemy
 {
 public:
 	BabyGrogu() = default;
-	BabyGrogu(Ref<Scene> scene);
+	BabyGrogu(Ref<Scene> scene,int level);
 };

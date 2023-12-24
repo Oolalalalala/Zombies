@@ -1,8 +1,8 @@
 #include "SnowDragon.h"
 
-SnowDragon::SnowDragon(Ref<Scene> scene)
-	: Enemy(scene, 100.0, 100.0, Asset::snow_dragon)
+SnowDragon::SnowDragon(Ref<Scene> scene,int level)
+	: Enemy(scene, level, Asset::snow_dragon)
 {
-	_entity.GetComponent<TransformComponent>().Scale *= 100.0f;
 	_entity.GetComponent<AnimatorComponent>().IsPlaying = true;
+	_entity.GetComponent<AnimatorComponent>().AnimationIndex = 1;
 }

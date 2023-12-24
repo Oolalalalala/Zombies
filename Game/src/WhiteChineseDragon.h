@@ -4,5 +4,5 @@ class WhiteChineseDragon :public Enemy
 {
 public:
 	WhiteChineseDragon() = default;
-	WhiteChineseDragon(Ref<Scene> scene);
+	WhiteChineseDragon(Ref<Scene> scene,int level);
 };

@@ -4,5 +4,5 @@ class SnowDragon :public Enemy
 {
 public:
 	SnowDragon() = default;
-	SnowDragon(Ref<Scene> scene);
+	SnowDragon(Ref<Scene> scene,int level);
 };

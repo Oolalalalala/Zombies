@@ -27,15 +27,14 @@ enum class Asset
 
 	monster_low_poly, monster_low_polyTexture, monster_low_polyMaterial,
 
-	low_poly_dragon_white, low_poly_dragon_whiteTexture, low_poly_dragon_whiteMaterial,
-
-	fantasy_reverse_horn_dragon_hight_poly, fantasy_reverse_horn_dragon_hight_polyTexture, fantasy_reverse_horn_dragon_hight_polyMaterial,
-
 	dragon_blue_low_poly, dragon_blue_low_polyTexture, dragon_blue_low_polyMaterial,
 
 	baby_yoda_grogu_with_glasses, baby_yoda_grogu_with_glassesTexture1, baby_yoda_grogu_with_glassesMaterial1, baby_yoda_grogu_with_glassesTexture2, baby_yoda_grogu_with_glassesMaterial2, baby_yoda_grogu_with_glassesTexture3, baby_yoda_grogu_with_glassesMaterial3, baby_yoda_grogu_with_glassesTexture4, baby_yoda_grogu_with_glassesMaterial4,
+	
+	MobPathTexture,OringinalFloor,
 
-
+	stylized_crystal,stylized_crystalTexture,stylized_crystalMaterial,
+	
 	OpenSansFont
 };
 

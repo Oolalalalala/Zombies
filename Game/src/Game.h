@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Engine.h"
+
 #include "Patrick.h"
 #include "WhiteChineseDragon.h"
 #include "SnowDragon.h"
 #include "ShadowDragon.h"
 #include "MonsterSkull.h"
 #include "Monster.h"
-#include "FantasyDragon.h"
 #include "BlueDragon.h"
 #include "BlueDragon.h"
 #include "BabyGrogu.h"
@@ -20,8 +20,11 @@
 #include "CannonTower.h"
 #include "PoisonTower.h"
 #include "WizardTower.h"
+
 #include "Warning.h"
 #include "Map.h"
+#include "Start.h"
+#include "Gold.h"
 
 class Game : public Application
 {
@@ -33,17 +36,8 @@ public:
 	virtual void OnUpdate(float dt);
 	virtual void OnDestroy();
 
-private:
-	Entity CreateCamera();
-	Entity CreateSprite();
-	Entity CreateSpriteWithTexture(const std::string& path);
-	Entity LoadModel();
-	Entity LoadModelWithTexture();
-	Entity CreateModelByCopying(Entity copySource);
-	Entity CreateText();
-	Entity CreateMusic();
-	Entity CreateSound();
-	Entity CreateFloor(int i, int j);//const std::string& path
+
+	void BeginGame();
 
 private:
 	Ref<Scene> m_Scene;
@@ -73,10 +67,12 @@ private:
 	ShadowDragon* shd;
 	MonsterSkull* ms;
 	Monster* m;
-	FantasyDragon* fd;
 	BlueDragon* bd;
 	BabyGrogu* bg;
 
+	Start* s;
+	bool Begin = 0;
+	Gold* g;
 };
 
 Application* CreateApplication()

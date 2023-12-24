@@ -4,5 +4,5 @@ class MonsterSkull :public Enemy
 {
 public:
 	MonsterSkull() = default;
-	MonsterSkull(Ref<Scene> scene);
+	MonsterSkull(Ref<Scene> scene,int level);
 };
