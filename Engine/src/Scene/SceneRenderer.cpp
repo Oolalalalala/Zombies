@@ -54,12 +54,11 @@ void SceneRenderer::Initialize()
 
 	m_CameraDataUniformBuffer = UniformBuffer::Create(sizeof(CameraUniformBufferData), CameraData);
 	m_BoneTransformUniformBuffer = UniformBuffer::Create(256 * sizeof(glm::mat4), BoneTransform);
-	m_BoneTransformBuffer.Allocate(256);
+	m_BoneTransformBuffer.resize(256); // The current max bone count is 256
 }
 
 void SceneRenderer::ShutDown()
 {
-	m_BoneTransformBuffer.Release();
 }
 
 void SceneRenderer::BeginScene(const Camera& camera)
@@ -115,7 +114,7 @@ void SceneRenderer::EndScene()
 
 			auto skeleton = data.Mesh->GetSkeleton();
 			skeleton->GetBoneTransforms(data.Animation, data.AnimationTime, m_BoneTransformBuffer);
-			m_BoneTransformUniformBuffer->SetData(m_BoneTransformBuffer.Data, skeleton->GetBoneCount() * sizeof(glm::mat4));
+			m_BoneTransformUniformBuffer->SetData(m_BoneTransformBuffer.data(), skeleton->GetBoneCount() * sizeof(glm::mat4));
 
 			lastSkinnedMesh = data.Mesh;
 		}
@@ -172,7 +171,7 @@ void SceneRenderer::EndScene()
 
 			auto skeleton = data.Mesh->GetSkeleton();
 			skeleton->GetBoneTransforms(data.Animation, data.AnimationTime, m_BoneTransformBuffer);
-			m_BoneTransformUniformBuffer->SetData(m_BoneTransformBuffer.Data, skeleton->GetBoneCount() * sizeof(glm::mat4));
+			m_BoneTransformUniformBuffer->SetData(m_BoneTransformBuffer.data(), skeleton->GetBoneCount() * sizeof(glm::mat4));
 
 			lastSkinnedMesh = data.Mesh;
 		}

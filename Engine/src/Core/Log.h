@@ -35,7 +35,7 @@ private:
 	#define TRACE(...)         ::Log::GetClientLogger()->trace(__VA_ARGS__)
 	#define INFO(...)          ::Log::GetClientLogger()->info(__VA_ARGS__)
 	#define WARN(...)          ::Log::GetClientLogger()->warn(__VA_ARGS__)
-	#define ERROR(...)         ::Log::GetClientLogger()->error(__VA_ARGS__)
+	//#define ERROR(...)         ::Log::GetClientLogger()->error(__VA_ARGS__)
 	#define CRITICAL(...)      ::Log::GetClientLogger()->critical(__VA_ARGS__)
 	
 	#define CORE_VERIFY(x, ...) if (!(x)) CORE_CRITICAL(__VA_ARGS__)
@@ -52,7 +52,7 @@ private:
 	#define TRACE(...)           (void*)0;
 	#define INFO(...)			 (void*)0;
 	#define WARN(...)			 (void*)0;
-	#define ERROR(...)			 (void*)0;
+	//#define ERROR(...)			 (void*)0;
 	#define CRITICAL(...)		 (void*)0;
 	
 	#define CORE_VERIFY(x, ...)  (void*)0;

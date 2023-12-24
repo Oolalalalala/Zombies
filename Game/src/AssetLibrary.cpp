@@ -128,6 +128,39 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	s_ModelPrefabs[Asset::stylized_crystal] = Model::Load(scene, "Model/stylized_crystal/scene.gltf", { s_Assets[Asset::stylized_crystalMaterial] });
 	s_ModelPrefabs[Asset::stylized_crystal].GetComponent<MeshRendererComponent>().Enabled = false;
 	
+	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Scale *= 50.f;
+	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//Model::LoadSkinned()
+	//SkinnedMeshRendererComponent
+
+
+
+	s_Assets[Asset::ArrowTexture] = AssetManager::LoadTexture("Model/weapons/arrow/textures/Material.001_Base_Color_1001.png");
+	s_Assets[Asset::ArrowMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::ArrowTexture]);
+	s_ModelPrefabs[Asset::ArrowModel] = Model::Load(scene, "Model/weapons/arrow/source/Arrow.fbx", { s_Assets[Asset::ArrowMaterial] });
+	s_ModelPrefabs[Asset::ArrowModel].GetComponent<MeshRendererComponent>().Enabled = false;
+	s_ModelPrefabs[Asset::ArrowModel].GetComponent<TransformComponent>().Scale = glm::vec3(300.0f, 100.0f, 300.0f);
+
+
+	s_Assets[Asset::CannonBallTexture] = AssetManager::LoadTexture("Model/weapons/cannonball/textures/Bomba_Base_Color.png");
+	s_Assets[Asset::CannonBallMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::CannonBallTexture]);
+	s_ModelPrefabs[Asset::CannonBallModel] = Model::Load(scene, "Model/weapons/cannonball/source/Bomba.fbx", { s_Assets[Asset::CannonBallMaterial] });
+	s_ModelPrefabs[Asset::CannonBallModel].GetComponent<MeshRendererComponent>().Enabled = false;
+	s_ModelPrefabs[Asset::CannonBallModel].GetComponent<TransformComponent>().Scale *= 0.01f;
+
+
+	s_Assets[Asset::MageBallTexture] = AssetManager::LoadTexture("Model/weapons/mageball/BaseColor.png");
+	s_Assets[Asset::MageBallMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::MageBallTexture]);
+	s_ModelPrefabs[Asset::MageBallModel] = Model::Load(scene, "Model/weapons/mageball/mageBall.fbx", { s_Assets[Asset::MageBallMaterial] });
+	s_ModelPrefabs[Asset::MageBallModel].GetComponent<MeshRendererComponent>().Enabled = false;
+	s_ModelPrefabs[Asset::MageBallModel].GetComponent<TransformComponent>().Scale *= 0.01f;
+	
+	s_Assets[Asset::LightBeamTexture] = AssetManager::LoadTexture("Model/weapons/lightbeam/base_color.png");
+	s_Assets[Asset::LightBeamMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::LightBeamTexture]);
+	s_ModelPrefabs[Asset::LightBeamModel] = Model::Load(scene, "Model/weapons/lightbeam/light_beam.fbx", { s_Assets[Asset::LightBeamMaterial] });
+	s_ModelPrefabs[Asset::LightBeamModel].GetComponent<MeshRendererComponent>().Enabled = false;
+
+
 	for (int i = (int)Asset::ArcherTowerLevel1Model; i <= (int)Asset::WizardTowerLevel4Model; i++)
 	{
 		s_ModelPrefabs[(Asset)i].GetComponent<MeshRendererComponent>().Enabled = false;
@@ -156,6 +189,11 @@ void AssetLibrary::ShutDown()
 AssetHandle AssetLibrary::Get(Asset asset)
 {
 	return s_Assets[asset];
+}
+
+void AssetLibrary::DestoryModel(Entity model)
+{
+	s_Scene->DestroyEntity(model);
 }
 
 Entity AssetLibrary::GetModel(Asset asset)

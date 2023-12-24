@@ -16,6 +16,16 @@ Enemy::Enemy(Ref<Scene> scene, int level, Asset modelAsset) {
 Enemy::~Enemy(){
 }
 
+glm::vec3 Enemy::getPosition()
+{
+	return _entity.GetComponent<TransformComponent>().Position;
+}
+
+glm::quat Enemy::getRotation()
+{
+	return _entity.GetComponent<TransformComponent>().Rotation;
+}
+
 void Enemy::Destroy(Ref<Scene> scene)
 {
 	scene->DestroyEntity(_entity);

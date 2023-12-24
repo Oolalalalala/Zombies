@@ -15,7 +15,7 @@ enum class Asset
 	PoisonTowerLevel1Model, PoisonTowerLevel2Model, PoisonTowerLevel3Model, PoisonTowerLevel4Model,
 	WizardTowerLevel1Model, WizardTowerLevel2Model, WizardTowerLevel3Model, WizardTowerLevel4Model,
 
-	spongebob_squarepants_patrick, PatrickTexture, PatrickMaterial, 
+	spongebob_squarepants_patrick, PatrickTexture, PatrickMaterial,
 
 	white_chinese_dragon, white_chinese_dragonTexture, white_chinese_dragonMaterial,
 
@@ -30,6 +30,12 @@ enum class Asset
 	dragon_blue_low_poly, dragon_blue_low_polyTexture, dragon_blue_low_polyMaterial,
 
 	baby_yoda_grogu_with_glasses, baby_yoda_grogu_with_glassesTexture1, baby_yoda_grogu_with_glassesMaterial1, baby_yoda_grogu_with_glassesTexture2, baby_yoda_grogu_with_glassesMaterial2, baby_yoda_grogu_with_glassesTexture3, baby_yoda_grogu_with_glassesMaterial3, baby_yoda_grogu_with_glassesTexture4, baby_yoda_grogu_with_glassesMaterial4,
+
+	ArrowTexture, ArrowMaterial, ArrowModel,
+	CannonBallTexture, CannonBallMaterial, CannonBallModel,
+	MageBallTexture, MageBallMaterial, MageBallModel,
+	LightBeamTexture, LightBeamMaterial, LightBeamModel,
+
 	
 	MobPathTexture,OringinalFloor,
 
@@ -46,6 +52,8 @@ public:
 
 	static AssetHandle Get(Asset asset);
 	static Entity GetModel(Asset asset);
+
+	static void DestoryModel(Entity entity);
 
 private:
 	static Ref<Scene> s_Scene;

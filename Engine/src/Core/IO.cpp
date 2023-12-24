@@ -28,7 +28,7 @@ bool IO::IsKeyDown(KeyCode key)
 
 bool IO::IsKeyPressed(KeyCode key)
 {
-    if ((int)key >= s_Data.KeyCount) 
+    if ((int)key >= s_Data.KeyCount)
         return false;
     return s_Data.KeyboardState[(int)key];
 }

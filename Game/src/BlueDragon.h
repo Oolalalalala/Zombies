@@ -5,4 +5,5 @@ class BlueDragon :public Enemy
 public:
 	BlueDragon() = default;
 	BlueDragon(Ref<Scene> scene,int level);
+	int _type = 1;
 };

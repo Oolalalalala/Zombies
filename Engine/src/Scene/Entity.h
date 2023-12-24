@@ -3,7 +3,6 @@
 #include "entt/entt.hpp"
 #include "Scene.h"
 
-
 	
 class Entity
 {
@@ -42,14 +41,14 @@ public:
 		return m_Scene->m_Registry.any<Args...>(m_EntityID);
 	}
 
-	operator bool() { return m_EntityID != entt::null; }
+	operator bool() const { return m_EntityID != entt::null; }
 
-	bool operator==(const Entity& other)
+	bool operator==(const Entity& other) const
 	{
 		return m_EntityID == other.m_EntityID && m_Scene == other.m_Scene;
 	}
 
-	bool operator!=(const Entity& other)
+	bool operator!=(const Entity& other) const
 	{
 		return !(*this == other);
 	}
@@ -58,4 +57,20 @@ private:
 	Scene* m_Scene = nullptr;
 
 	friend class Scene;
+	friend class std::hash<Entity>;
 };
+
+
+
+namespace std {
+
+	template<>
+	struct hash<Entity>
+	{
+		inline std::size_t operator()(const Entity& entity) const
+		{
+			return hash<uint64_t>()((uint32_t)entity.m_EntityID & (uint64_t)entity.m_Scene);
+		}
+	};
+
+}

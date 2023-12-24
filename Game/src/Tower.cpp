@@ -13,11 +13,11 @@ Tower::~Tower() {
 
 void Tower::Destroy(Ref<Scene> scene)
 {
-	scene->DestroyEntity(_entity);
+	if (_entity) {
+		scene->DestroyEntity(_entity);
+		_entity = {};
+	}
 }
-
-
-
 
 void Tower::setPosition(glm::vec3 position)
 {
@@ -29,10 +29,6 @@ void Tower::setRotation(glm::quat rotation)
 	auto& transform = _entity.GetComponent<TransformComponent>();
 	transform.Rotation = rotation;
 }
-void Tower::update(float dt)
-{
-
-}
 void Tower::takeDamage(double D)
 {
 	_hp -= D;
@@ -42,6 +38,11 @@ void Tower::setlevel(int l, Ref<Scene> scene)
 	_level = l;
 	changeModel(scene);
 	_entity.GetComponent<MeshRendererComponent>().Enabled = true;
+}
+void Tower::setTransparent()
+{
+	_entity.GetComponent<MaterialTableComponent>().Materials[0] = AssetLibrary::Get(Asset::TowerTransparentMaterial);
+
 }
 
 
@@ -55,7 +56,7 @@ double Tower::getHp()
 {
 	return _hp;
 }
-double Tower::getLevel()
+int Tower::getLevel()
 {
 	return _level;
 }
