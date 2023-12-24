@@ -15,17 +15,18 @@ public:
 	void update(float dt);
 	void takeDamage(double D);
 	void setlevel(int l, Ref<Scene> scene);
+	void setTransparent();
 
 	double getDamage();
 	double getHp();
-	double getLevel();
+	int getLevel();
 
 	
 
 protected:
 	double _hp, _damage;
 	Entity _entity;
-	int _level=1;
+	int _level=0;
 	virtual void changeModel(Ref<Scene> scene) = 0;
 
 };

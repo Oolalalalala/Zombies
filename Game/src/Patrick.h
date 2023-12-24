@@ -5,4 +5,5 @@ class Patrick :public Enemy
 public:
 	Patrick() = default;
 	Patrick(Ref<Scene> scene);
+	int _type = 8;
 };

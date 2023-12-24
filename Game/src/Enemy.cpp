@@ -58,3 +58,15 @@ double Enemy::gethp()
 {
 	return _hp;
 }
+
+glm::vec3 Enemy::getPos()
+{
+	auto& transform = _entity.GetComponent<TransformComponent>();
+	return transform.Position;
+}
+
+glm::quat Enemy::getRotation()
+{
+	auto& transform = _entity.GetComponent<TransformComponent>();
+	return transform.Rotation;
+}

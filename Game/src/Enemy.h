@@ -15,6 +15,9 @@ public:
 	void takeDamage(double);
 	double getDamage();
 	double gethp();
+	glm::vec3 getPos();
+	glm::quat getRotation();
+	int	_type;
 	
 protected:
 	double _hp, _damage;
