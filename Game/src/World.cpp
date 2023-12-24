@@ -284,7 +284,6 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		for(auto it = m_SpawnList.begin();it!=m_SpawnList.end();it++)
 			MobSpawn(*it, lvl);
 	}
-	std::cout << m_MobMap.size() << '\n';
 	MobMove();
 
 	m_Scene->OnUpdate(dt); // Renders the scene
@@ -339,7 +338,7 @@ void World::MobMove()
 		Enemy* mob = it->first;
 		int MobIdx = mob->_type;
 		glm::ivec2 map = it->second;
-		glm::vec3 MobPos = mob->getPos();
+		glm::vec3 MobPos = mob->getPosition();
 
 		glm::vec3 goal = glm::vec3(m_map->pathinfo[map.x][map.y].x * 96, MobPos.y, m_map->pathinfo[map.x][map.y].y * 96);
 		glm::vec3 delta = goal - MobPos;
@@ -371,7 +370,6 @@ void World::ClearMap()
 		for (int j = 1;j < 50;j++) {
 			if (m_map->mapinfo[i][j] == 4 && towers[i][j] != NULL) {
 				towers[i][j]->Destroy(m_Scene);
-				std::cout << "hi";
 				delete towers[i][j];
 				towers[i][j] = NULL;
 			}
