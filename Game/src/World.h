@@ -32,7 +32,7 @@ public:
 	void OnUpdate(float dt);
 	void ClearMap();
 	void MobSpawn(glm::ivec2, int);
-	void MobMove();
+	void MobMove(float);
 
 private:
 	Entity CreateCamera();
@@ -63,9 +63,10 @@ private:
 	Warning* w;
 	Warning* BuildWarning;
 	glm::ivec2 PS, NS, Building;
-	std::vector<Enemy*> m_MonsterList;
 	std::vector<glm::ivec2> m_SpawnList;
 	std::unordered_map<Enemy*, glm::ivec2> m_MobMap;
+
+	std::vector<glm::ivec2> AttackableTower[51][51];
 
 	glm::quat DefaultDir;
 	float PathPeriod = 5.f, LvlUpPeriod = 10.f;

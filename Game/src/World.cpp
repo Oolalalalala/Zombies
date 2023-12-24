@@ -115,9 +115,11 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 	// FPS counter
 	#if 1
 	static float TotalTime = 0;
+	static float PathTime = 0;
 	static float time = 0;
 	static int cnt = 0;
 	TotalTime += dt;
+	PathTime += dt;
 	time += dt;
 	cnt++;
 	if (time > 1.0f)
@@ -265,6 +267,15 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 			break;
 		}
 		}
+		for (auto it = m_MobMap.begin();it != m_MobMap.end();it++) {
+			Enemy* mob = it->first;
+			glm::vec3 MobPos = mob->getPosition();
+			glm::vec3 TowerPos = glm::vec3(Building.x * 96, MobPos.y, Building.y * 96);
+			float d2 = glm::length(MobPos - TowerPos);
+			if (d2 - 768 < 0) {//in
+				towers[Building.x][Building.y]->AddTrackingEnemy(mob);
+			}
+		}
 		towers[Building.x][Building.y]->setPosition(glm::vec3(Building.x * 96, 0, Building.y * 96));
 		towers[Building.x][Building.y]->setlevel(1, m_Scene);
 		m_map->ChangeColor(m_Scene, Building.x, Building.y, 1);
@@ -273,18 +284,23 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 	#endif
 
 	// Mob path and building destroy
-	if (TotalTime > PathPeriod)
+	static int lvl = 1;
+	lvl = 1 + int(TotalTime / LvlUpPeriod);
+	if (PathTime > PathPeriod)
 	{
-		int lvl = 1;
 		glm::ivec2 spawn = m_map->DecidePath(m_Scene);
 		m_SpawnList.push_back(spawn);
-		//TRACE("{0} {1}", spawn.x, spawn.y);
-		TotalTime -= PathPeriod;
+		PathTime -= PathPeriod;
 		ClearMap();
-		for(auto it = m_SpawnList.begin();it!=m_SpawnList.end();it++)
-			MobSpawn(*it, lvl);
+		for(auto it = m_SpawnList.begin();it!=m_SpawnList.end();it++) MobSpawn(*it, lvl);
+		//MobSpawn(spawn, lvl);
 	}
-	MobMove();
+	MobMove(dt);
+	for (int i = 0;i < 51;i++) {
+		for (int j = 0;j < 51;j++) {
+			if(towers[i][j]!=NULL)towers[i][j]->OnUpdate(dt);
+		}
+	}
 
 	m_Scene->OnUpdate(dt); // Renders the scene
 }
@@ -292,39 +308,48 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 
 void World::MobSpawn(glm::ivec2 spawn, int lvl) {
 	int MobIdx = glm::linearRand(1, 6);
+	MobIdx = 7;
 	Enemy* mob = NULL;
 	switch (MobIdx) {
 		case 1: {//BlueDragon
 			mob = new BlueDragon(m_Scene);
+			mob->_type = 1;
 			break;
 		}
 		case 2: {//FantasyDragon
 			mob = new FantasyDragon(m_Scene);
+			mob->_type = 2;
 			break;
 		}
 		case 3: {//MonsterSkull
 			mob = new MonsterSkull(m_Scene);
+			mob->_type = 3;
 			break;
 		}
 		case 4: {//ShadowDragon
 			mob = new ShadowDragon(m_Scene);
+			mob->_type = 4;
 			break;
 		}
 		case 5: {//SnowDragon
 			mob = new SnowDragon(m_Scene);
+			mob->_type = 5;
 			break;
 		}
 		case 6: {//WhiteChineseDragon
 			mob = new WhiteChineseDragon(m_Scene);
+			mob->_type = 6;
 			break;
 		}
 		case 7: {//Yoda
 			mob = new BabyGrogu(m_Scene);
+			mob->_type = 7;
 			//init face toward +z
 			break;
 		}
 		case 8: {//Patrick
 			mob = new Patrick(m_Scene);
+			mob->_type = 8;
 			break;
 		}
 	}
@@ -332,34 +357,73 @@ void World::MobSpawn(glm::ivec2 spawn, int lvl) {
 	m_MobMap[mob] = spawn;
 }
 
-void World::MobMove()
+void World::MobMove(float dt)
 {
-	for (auto it = m_MobMap.begin(); it != m_MobMap.end();it++) {
+	for (auto it = m_MobMap.begin(); it != m_MobMap.end();) {
 		Enemy* mob = it->first;
-		int MobIdx = mob->_type;
-		glm::ivec2 map = it->second;
-		glm::vec3 MobPos = mob->getPosition();
+		if (mob->gethp() <= 0) {
+			for (int i = 0;i < 51;i++) {
+				for (int j = 0;j < 51;j++) {
+					if (towers[i][j] != NULL) {
+						towers[i][j]->RemoveTrackingEnemy(mob);
+					}
+				}
+			}
+			mob->Destroy(m_Scene);
+			delete mob;
+			it = m_MobMap.erase(it);
+		}
+		else {
+			int MobIdx = mob->_type;
+			glm::ivec2 map = it->second;
+			glm::vec3 MobPos = mob->getPosition();
 
-		glm::vec3 goal = glm::vec3(m_map->pathinfo[map.x][map.y].x * 96, MobPos.y, m_map->pathinfo[map.x][map.y].y * 96);
-		glm::vec3 delta = goal - MobPos;
-		glm::vec3 dir = glm::normalize(delta);
-		float LR, angle;
-		glm::quat rot;
-		switch (MobIdx) {
-			default: {
+			glm::vec3 goal = glm::vec3(m_map->pathinfo[map.x][map.y].x * 96, MobPos.y, m_map->pathinfo[map.x][map.y].y * 96);
+			glm::vec3 delta = goal - MobPos;
+			glm::vec3 dir = glm::normalize(delta);
+			float LR, angle;
+			glm::quat rot;
+			switch (MobIdx) {
+			case 7: {
 				LR = (dir.x > 0) ? 1.f : -1.f;
 				angle = glm::dot(dir, glm::vec3(0.f, 0.f, 1.f));
 				rot = glm::rotate(DefaultDir, LR * glm::acos(angle), glm::vec3(0.0f, 0.0f, 1.0f));
 				break;
 			}
-		}
-		
-		mob->setRotation(rot);
-		if (glm::length(delta) > 40) {
-			MobPos += dir * 0.25f;
+			default: {
+				LR = (dir.x > 0) ? 1.f : -1.f;
+				angle = glm::dot(dir, glm::vec3(0.f, 0.f, 1.f));
+				rot = glm::rotate(DefaultDir, LR * glm::acos(angle), glm::vec3(0.0f, 1.0f, 0.0f));
+				break;
+			}
+			}
+
+			mob->setRotation(rot);
+			glm::ivec2 Mobmap = m_map->Pos2Map(MobPos);
+			glm::vec3 OldMobPos = MobPos;
+			if (glm::length(delta) > 40) {
+				MobPos += dir * dt * 400.f;
+			}
 			mob->setPosition(MobPos);
 			m_MobMap[mob] = m_map->Pos2Map(MobPos);
+			for (int i = 0;i < 51;i++) {
+				for (int j = 0;j < 51;j++) {
+					if (towers[i][j] != NULL) {
+						glm::vec3 TowerPos(i * 96, OldMobPos.y, j * 96);
+						float d1 = glm::length(OldMobPos - TowerPos);
+						float d2 = glm::length(MobPos - TowerPos);
+						if (d1 - 768 > 0 && d2 - 768 < 0) {//in
+							towers[i][j]->AddTrackingEnemy(mob);
+						}
+						else if (d1 - 768 < 0 && d2 - 768 > 0) {//out
+							towers[i][j]->RemoveTrackingEnemy(mob);
+						}
+					}
+				}
+			}
+			it++;
 		}
+		
 	}
 }
 
