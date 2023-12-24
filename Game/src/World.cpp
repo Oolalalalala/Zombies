@@ -34,7 +34,7 @@ World::World()
 	NowBuilding->setlevel(0, m_Scene);
 	NowBuilding->Destroy(m_Scene);
 
-	bg = new BabyGrogu(m_Scene);
+	bg = new BabyGrogu(m_Scene, 1);
 	DefaultDir = bg->getRotation();
 	bg->setPosition(glm::vec3(96.f * 3, -8000, 96.f * 0));
 
@@ -295,36 +295,32 @@ void World::MobSpawn(glm::ivec2 spawn, int lvl) {
 	Enemy* mob = NULL;
 	switch (MobIdx) {
 		case 1: {//BlueDragon
-			mob = new BlueDragon(m_Scene);
-			break;
-		}
-		case 2: {//FantasyDragon
-			mob = new FantasyDragon(m_Scene);
+			mob = new BlueDragon(m_Scene, 1);
 			break;
 		}
 		case 3: {//MonsterSkull
-			mob = new MonsterSkull(m_Scene);
+			mob = new MonsterSkull(m_Scene, 1);
 			break;
 		}
 		case 4: {//ShadowDragon
-			mob = new ShadowDragon(m_Scene);
+			mob = new ShadowDragon(m_Scene, 1);
 			break;
 		}
 		case 5: {//SnowDragon
-			mob = new SnowDragon(m_Scene);
+			mob = new SnowDragon(m_Scene, 1);
 			break;
 		}
 		case 6: {//WhiteChineseDragon
-			mob = new WhiteChineseDragon(m_Scene);
+			mob = new WhiteChineseDragon(m_Scene, 1);
 			break;
 		}
 		case 7: {//Yoda
-			mob = new BabyGrogu(m_Scene);
+			mob = new BabyGrogu(m_Scene, 1);
 			//init face toward +z
 			break;
 		}
 		case 8: {//Patrick
-			mob = new Patrick(m_Scene);
+			mob = new Patrick(m_Scene, 1);
 			break;
 		}
 	}

@@ -21,7 +21,7 @@ protected:
 	void changeModel(Ref<Scene> scene);
 
 	std::vector<Enemy*> m_TargetList;
-	std::unordered_map<Entity, AttackTarget> m_AttackList;
+	std::unordered_map<Entity, ArcherAttackTarget> m_AttackList;
 
 	float m_FireInterval = 0.7f;
 	float m_ArrowSpeed = 300.0f;
