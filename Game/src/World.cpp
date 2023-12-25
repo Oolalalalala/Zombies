@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "glm/gtc/random.hpp"
+#include "glm/gtx/vector_angle.hpp"
 #include "AssetLibrary.h"
 
 int BlockStatus[51][51] = { 0 };
@@ -51,11 +52,18 @@ World::World()
 	transform.Scale *= 5.0f;
 
 	gold = new Gold(m_Scene);
+
+	IO::SetCursorVisibility(false);
+	m_IsCursorMode = false;
 }
 
 World::~World()
 {
+	AudioMixer::StopMusic(AssetManager::GetMusic(m_Music.GetComponent<MusicSourceComponent>().Music));
+
 	AssetLibrary::ShutDown();
+
+	IO::SetCursorVisibility(true);
 }
 
 float speed = 700.0f;
@@ -63,51 +71,94 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 {
 	auto& cameraTransform = m_Camera.GetComponent<TransformComponent>();
 
-	// Mouse control
-	static glm::vec2 prevPos;
-	glm::vec2 mousePos = IO::GetMousePosition(); // IO:滑鼠位置與是否按下
-	glm::vec2 delta = mousePos - prevPos;
-	prevPos = mousePos;
+	if (IO::IsKeyDown(KeyCode::Escape))
+	{
+		m_IsCursorMode = !m_IsCursorMode;
+		IO::SetCursorVisibility(m_IsCursorMode);
+	}
 
-	static float yaw = 180.0f, pitch = 0.0f;
-	yaw += 100.0f * delta.x * dt;
-	//yaw = 1.5f * yaw;
-	pitch -= 100.0f * delta.y * dt;
-	//pitch = 1.5f * pitch;
+	glm::vec3 lookat;
 
-	if (pitch > 89.99f) pitch = 89.99f;
-	if (pitch < -89.99f) pitch = -89.99f;
+	if (!m_IsCursorMode)
+	{
+		// Mouse control
+		static glm::vec2 prevPos = IO::GetMousePosition();
+		glm::vec2 newPos = IO::GetMousePosition();
+		glm::vec2 delta = newPos - prevPos;
+		prevPos = newPos;
 
-	cameraTransform.Rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
-	cameraTransform.Rotation = glm::rotate(cameraTransform.Rotation, glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
-	cameraTransform.Rotation = glm::rotate(cameraTransform.Rotation, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+
+		// Wrap the cursor around
+		glm::vec2 windowSize = IO::GetWindowSize();
+		if (prevPos.x <= 0)
+		{
+			IO::SetCursorPosition({ windowSize.x - 2, prevPos.y });
+			prevPos = { windowSize.x - 2, prevPos.y };
+		}
+		if (prevPos.x >= windowSize.x - 1)
+		{
+			IO::SetCursorPosition({ 1, prevPos.y });
+			prevPos = { 1, prevPos.y };
+		}
+		if (prevPos.y <= 0)
+		{
+			IO::SetCursorPosition({ prevPos.x, windowSize.y - 2 });
+			prevPos = { prevPos.x, windowSize.y - 2 };
+		}
+		if (prevPos.y >= windowSize.y - 1)
+		{
+			IO::SetCursorPosition({ prevPos.x, 1 });
+			prevPos = { prevPos.x, 1 };
+		}
+
+		static float yaw = 180.0f, pitch = 0.0f;
+		yaw += 100.0f * delta.x * dt;
+		pitch -= 100.0f * delta.y * dt;
+
+		if (pitch > 89.99f) pitch = 89.99f;
+		if (pitch < -89.99f) pitch = -89.99f;
+
+		cameraTransform.Rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+		cameraTransform.Rotation = glm::rotate(cameraTransform.Rotation, glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+		cameraTransform.Rotation = glm::rotate(cameraTransform.Rotation, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+
+		// Rotation to direction
+#if 1
+		glm::vec3 dir = glm::inverse(glm::toMat4(cameraTransform.Rotation)) * glm::vec4(0.f, 0.f, 1.f, 0.0f);
+		lookat = dir;
+		dir.y = 0;
+		dir = glm::normalize(dir);
+		lookat = glm::normalize(lookat);
+
+		if (IO::IsKeyPressed(KeyCode::W))
+			cameraTransform.Position += speed * dir * dt;
+		if (IO::IsKeyPressed(KeyCode::S))
+			cameraTransform.Position -= speed * dir * dt;
+		if (IO::IsKeyPressed(KeyCode::A))
+			cameraTransform.Position -= speed * glm::cross(dir, glm::vec3(0.0f, 1.0f, 0.0f)) * dt;
+		if (IO::IsKeyPressed(KeyCode::D))
+			cameraTransform.Position += speed * glm::cross(dir, glm::vec3(0.0f, 1.0f, 0.0f)) * dt;
+		if (IO::IsKeyPressed(KeyCode::Space))
+			if (cameraTransform.Position.y < 512) cameraTransform.Position.y += speed * dt;
+		if (IO::IsKeyPressed(KeyCode::LeftShift))
+			if (cameraTransform.Position.y > 10) cameraTransform.Position.y -= speed * dt;
+	#endif
+	}
+
 	
-
 	w->update(m_Scene, dt);
 	BuildWarning->update(m_Scene, dt);
 
 
-	// Rotation to direction
-	#if 1
-	glm::vec3 dir = glm::inverse(glm::toMat4(cameraTransform.Rotation)) * glm::vec4(0.f, 0.f, 1.f, 0.0f);
-	glm::vec3 lookat = dir;
-	dir.y = 0;
-	dir = glm::normalize(dir);
-	lookat = glm::normalize(lookat);
 
-	if (IO::IsKeyPressed(KeyCode::W))
-		cameraTransform.Position += speed * dir * dt;
-	if (IO::IsKeyPressed(KeyCode::S))
-		cameraTransform.Position -= speed * dir * dt;
-	if (IO::IsKeyPressed(KeyCode::A))
-		cameraTransform.Position -= speed * glm::cross(dir, glm::vec3(0.0f, 1.0f, 0.0f)) * dt;
-	if (IO::IsKeyPressed(KeyCode::D))
-		cameraTransform.Position += speed * glm::cross(dir, glm::vec3(0.0f, 1.0f, 0.0f)) * dt;
-	if (IO::IsKeyPressed(KeyCode::Space))
-		if (cameraTransform.Position.y < 512) cameraTransform.Position.y += speed * dt;
-	if (IO::IsKeyPressed(KeyCode::LeftShift))
-		if (cameraTransform.Position.y > 10) cameraTransform.Position.y -= speed * dt;
-	#endif
+	// temp
+	static bool pause = false;
+	if (IO::IsKeyDown(KeyCode::P))
+		pause = !pause;
+	if (pause)
+		return;
 
 	// Detect which block is aiming
 	#if 1
@@ -406,8 +457,13 @@ void World::MobMove(float dt)
 			switch (MobIdx) {
 			case 1: {
 				LR = (dir.x > 0) ? -1.f : 1.f;
-				angle = glm::dot(dir, glm::vec3(0.f, 0.f, -1.f));
-				rot = glm::rotate(DefaultDir, LR * glm::acos(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+				//angle = glm::dot(dir, glm::vec3(0.f, 0.f, -1.f));
+				//rot = glm::rotate(DefaultDir, LR * glm::acos(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+				
+				float roll = -3.1415f / 2.0f;
+				float pitch = glm::orientedAngle(dir, glm::vec3(0, 0, -1), glm::vec3(0, 1, 0));
+				float yaw = 0;
+				rot = glm::quat(glm::vec3(pitch, yaw, roll));
 				break;
 			}
 			case 7: {
@@ -424,7 +480,7 @@ void World::MobMove(float dt)
 			}
 			}
 
-			//mob->setRotation(rot);
+			mob->setRotation(rot);
 			
 			glm::ivec2 Mobmap = m_map->Pos2Map(MobPos);
 			glm::vec3 OldMobPos = MobPos;
@@ -434,7 +490,7 @@ void World::MobMove(float dt)
 			if (glm::length(delta2) <= 240) {
 				hpBar->TakeDamage(mob->getDamage()*dt);
 				if (hpBar->GetHp() <= 0.0) {
-					Application::Get().Close();
+					m_EndGameCallback(0/*Put score here*/);
 				}
 			}
 			mob->setPosition(MobPos);
@@ -460,11 +516,16 @@ void World::MobMove(float dt)
 	}
 }
 
+void World::SetEndGameCallback(std::function<void(int)> callback)
+{
+	m_EndGameCallback = callback;
+}
+
 void World::ClearMap()
 {
 	//super inefficient
-	for (int i = 1;i < 50;i++)
-		for (int j = 1;j < 50;j++) {
+	for (int i = 1;i <= 50;i++)
+		for (int j = 1;j <= 50;j++) {
 			if (m_map->mapinfo[i][j] == 4 && towers[i][j] != NULL) {
 				towers[i][j]->Destroy(m_Scene);
 				delete towers[i][j];

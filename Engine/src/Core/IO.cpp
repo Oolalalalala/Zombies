@@ -71,6 +71,16 @@ glm::vec2 IO::GetWindowSize()
     return { s_Data.WindowWidth, s_Data.WindowHeight };
 }
 
+void IO::SetCursorVisibility(bool visible)
+{
+    SDL_ShowCursor(visible);
+}
+
+void IO::SetCursorPosition(glm::vec2 position)
+{
+    SDL_WarpMouseInWindow(Application::Get().GetWindow()->GetNativeWindow(), position.x, position.y);
+}
+
 bool IO::IsWindowResized()
 {
     return s_Data.IsWindowResized;

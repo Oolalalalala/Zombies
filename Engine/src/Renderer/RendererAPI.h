@@ -12,6 +12,7 @@ public:
 	static void Initialize();
 
 	static void SetDepthTest(bool enable);
+	static void SetBackFaceCulling(bool enable);
 	static void SetBlend(bool enable);
 
 	static void SetClearColor(const glm::vec4& color);

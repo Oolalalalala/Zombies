@@ -19,6 +19,14 @@ void RendererAPI::SetDepthTest(bool enable)
 		glDisable(GL_DEPTH_TEST);
 }
 
+void RendererAPI::SetBackFaceCulling(bool enable)
+{
+	if (enable)
+		glEnable(GL_CULL_FACE);
+	else
+		glDisable(GL_CULL_FACE);
+}
+
 void RendererAPI::SetBlend(bool enable)
 {
 	if (enable)

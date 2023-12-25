@@ -126,6 +126,7 @@ struct TextRendererComponent
 	glm::vec4 Color = glm::vec4(1.0f);
 	glm::vec3 OutlineColor = glm::vec3(1.0f);
 	float OutlineThickness = 0.0f;
+	glm::vec2 Alignment = glm::vec2(0.0f);
 	bool Enabled = true;
 
 	TextRendererComponent() = default;

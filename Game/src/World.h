@@ -35,6 +35,7 @@ public:
 	void ClearMap();
 	void MobSpawn(glm::ivec2, int);
 	void MobMove(float);
+	void SetEndGameCallback(std::function<void(int)> callback);
 
 private:
 	Entity CreateCamera();
@@ -86,5 +87,8 @@ private:
 	H_PBar* hpBar;
 
 	Gold* gold;
+
+	std::function<void(int)> m_EndGameCallback;
+	bool m_IsCursorMode;
 };
 

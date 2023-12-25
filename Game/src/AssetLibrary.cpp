@@ -100,7 +100,7 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	s_ModelPrefabs[Asset::dragon_blue_low_poly] = Model::LoadSkinned(scene, "Model/enemy/dragon_blue_-_low_poly/scene.gltf", { s_Assets[Asset::dragon_blue_low_polyMaterial] });
 	s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<SkinnedMeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Scale *= 10.0f;
-	s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	s_Assets[Asset::baby_yoda_grogu_with_glassesTexture1] = AssetManager::LoadTexture("Model/enemy/baby_yoda_grogu_with_glasses/textures/Material.004_baseColor.jpeg");
 	s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial1] = AssetManager::CreateMaterial(s_Assets[Asset::baby_yoda_grogu_with_glassesTexture1]);
