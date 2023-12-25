@@ -1,6 +1,7 @@
 #include "Start.h"
 #include "cstdlib"
 #include "ctime"
+#include "glm/gtc/random.hpp"
 Start::Start()
 {
 	s_Scene = CreateRef<Scene>("Demo");
@@ -40,15 +41,15 @@ Start::~Start()
 void Start::OnUpdate(float dt)
 {
 	srand(time(NULL));
-	int x = rand()*373 % 1000;
-	int y = rand()*373 % 1000;
+	int x = glm::linearRand( -800, 800);
+	int y = glm::linearRand( -500, 500 );
 	SetPosition(x, y);
 	s_Scene->OnUpdate(dt);
 }
 
 void Start::SetStartCallback(std::function<void()> callback)
 {
-	s_PressToPlay.AddComponent<ButtonComponent>().ButtonDownCallback = callback;
+	s_ChenChengPo.AddComponent<ButtonComponent>().ButtonDownCallback = callback;
 }
 
 void Start::SetPosition(int x, int y)

@@ -16,6 +16,7 @@ public:
 	void takeDamage(double);
 	double getDamage();
 	double gethp();
+	int getLevel();
 	int	_type;
 	
 protected:

@@ -34,3 +34,8 @@ void Gold::UpdateBlock()
 	auto& text = block.GetComponent<TextRendererComponent>();
 	text.Text = "GOLD:" + std::to_string(gold);
 }
+
+int Gold::GetGold()
+{
+	return gold;
+}

@@ -35,7 +35,7 @@ public:
 	void ClearMap();
 	void MobSpawn(glm::ivec2, int);
 	void MobMove(float);
-	void SetEndGameCallback(std::function<void(int)> callback);
+	glm::quat df[9];
 
 private:
 	Entity CreateCamera();
@@ -48,6 +48,7 @@ private:
 	Entity CreateMusic();
 	Entity CreateSound();
 	Entity CreateFloor(int i, int j);
+	Entity CreateTime();
 
 private:
 	Ref<Scene> m_Scene;
@@ -57,6 +58,8 @@ private:
 	Entity m_Text;
 	Entity m_Music;
 	Entity m_Sound;
+
+	Entity m_Time;
 
 	Map* m_map;
 
@@ -72,16 +75,7 @@ private:
 	std::vector<glm::ivec2> AttackableTower[51][51];
 
 	glm::quat DefaultDir;
-	float PathPeriod = 5.f, LvlUpPeriod = 10.f;
-
-	Patrick* p;
-	WhiteChineseDragon* wcd;
-	SnowDragon* snd;
-	ShadowDragon* shd;
-	MonsterSkull* ms;
-	Monster* m;
-	BlueDragon* bd;
-	BabyGrogu* bg;
+	float PathPeriod = 20.f, LvlUpPeriod = 60.f;
 
 	Entity crystal;
 	H_PBar* hpBar;
