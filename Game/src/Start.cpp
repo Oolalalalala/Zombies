@@ -8,7 +8,7 @@ Start::Start()
 
 	s_PressToPlay = s_Scene->CreateEntity("ptp");
 
-	s_PTP = AssetManager::LoadTexture("start/start_presstoplay.png");
+	s_PTP = AssetManager::LoadTexture("asset/start/start_presstoplay.png");
 	auto& spriteRenderer = s_PressToPlay.AddComponent<SpriteRendererComponent>(); // AddComponent 賦予性質
 	spriteRenderer.Size = glm::vec2(666*4.f, 375*4.f);
 	spriteRenderer.Texture = s_PTP;
@@ -21,7 +21,7 @@ Start::Start()
 
 	s_ChenChengPo = s_Scene->CreateEntity("ccp");
 
-	s_CCP = AssetManager::LoadTexture("start/Chen_Chengpo_nd.png");
+	s_CCP = AssetManager::LoadTexture("asset/start/Chen_Chengpo_nd.png");
 	auto& spriteRendererr = s_ChenChengPo.AddComponent<SpriteRendererComponent>(); // AddComponent 賦予性質
 	spriteRendererr.Size = glm::vec2(300.f, 200.f);
 	spriteRendererr.Texture = s_CCP;

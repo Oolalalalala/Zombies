@@ -128,8 +128,6 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	s_ModelPrefabs[Asset::stylized_crystal] = Model::Load(scene, "Model/stylized_crystal/scene.gltf", { s_Assets[Asset::stylized_crystalMaterial] });
 	s_ModelPrefabs[Asset::stylized_crystal].GetComponent<MeshRendererComponent>().Enabled = false;
 	
-	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Scale *= 50.f;
-	s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	//Model::LoadSkinned()
 	//SkinnedMeshRendererComponent
 

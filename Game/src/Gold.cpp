@@ -16,7 +16,7 @@ Gold::Gold(Ref<Scene> scene)
 	textRenderer.Text = "GOLD=0";
 	textRenderer.Font = AssetLibrary::Get(Asset::OpenSansFont);
 	textRenderer.FontSize = 20.0f;
-	textRenderer.Size = glm::vec2(200.0f, 100.0f);
+	textRenderer.Size = glm::vec2(100.0f, 30.0f);
 	textRenderer.OutlineColor = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 	textRenderer.OutlineThickness = 0.16f; // In the range [0, 0.3f] (not sure)
 }

@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "glm/gtc/random.hpp"
+#include "AssetLibrary.h"
 
 int BlockStatus[51][51] = { 0 };
 
@@ -34,9 +35,6 @@ World::World()
 	NowBuilding->setlevel(0, m_Scene);
 	NowBuilding->Destroy(m_Scene);
 
-	bg = new BabyGrogu(m_Scene, 1);
-	DefaultDir = bg->getRotation();
-	bg->setPosition(glm::vec3(96.f * 3, -8000, 96.f * 0));
 
 	for (int i = 0;i < 51;i++) {
 		for (int j = 0;j < 51;j++) {
@@ -44,6 +42,15 @@ World::World()
 			m_map->pathinfo[i][j] = glm::ivec2(25, 25);
 		}
 	}
+
+	hpBar = new H_PBar(m_Scene);
+	crystal = AssetLibrary::GetModel(Asset::stylized_crystal);
+	crystal.GetComponent<MeshRendererComponent>().Enabled = true;
+	auto& transform = crystal.GetComponent<TransformComponent>();
+	transform.Position = { 2400, 00, 2400 };
+	transform.Scale *= 5.0f;
+
+	gold = new Gold(m_Scene);
 }
 
 World::~World()
@@ -244,48 +251,58 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		NowBuilding->setTransparent();
 	}
 	if (IO::IsMouseButtonDown(MouseButton::Right) && Building != glm::ivec2(-1, -1)) {
-		NowBuilding->Destroy(m_Scene);
-		switch (BuildingIdx) {
-		case 0: {
-			towers[Building.x][Building.y] = new ArcherTower(m_Scene);
-			break;
+		if (gold->gold < 100)
+		{
+			w->Destroy(m_Scene);
+			delete w;
+			w = new Warning(m_Scene, 1);
 		}
-		case 1: {
-			towers[Building.x][Building.y] = new BallistaTower(m_Scene);
-			break;
-		}
-		case 2: {
-			towers[Building.x][Building.y] = new CannonTower(m_Scene);
-			break;
-		}
-		case 3: {
-			towers[Building.x][Building.y] = new PoisonTower(m_Scene);
-			break;
-		}
-		case 4: {
-			towers[Building.x][Building.y] = new WizardTower(m_Scene);
-			break;
-		}
-		}
-		for (auto it = m_MobMap.begin();it != m_MobMap.end();it++) {
-			Enemy* mob = it->first;
-			glm::vec3 MobPos = mob->getPosition();
-			glm::vec3 TowerPos = glm::vec3(Building.x * 96, MobPos.y, Building.y * 96);
-			float d2 = glm::length(MobPos - TowerPos);
-			if (d2 - 768 < 0) {//in
-				towers[Building.x][Building.y]->AddTrackingEnemy(mob);
+		else
+		{
+			gold->gold -= 100;
+			NowBuilding->Destroy(m_Scene);
+			switch (BuildingIdx) {
+			case 0: {
+				towers[Building.x][Building.y] = new ArcherTower(m_Scene);
+				break;
 			}
+			case 1: {
+				towers[Building.x][Building.y] = new BallistaTower(m_Scene);
+				break;
+			}
+			case 2: {
+				towers[Building.x][Building.y] = new CannonTower(m_Scene);
+				break;
+			}
+			case 3: {
+				towers[Building.x][Building.y] = new PoisonTower(m_Scene);
+				break;
+			}
+			case 4: {
+				towers[Building.x][Building.y] = new WizardTower(m_Scene);
+				break;
+			}
+			}
+			for (auto it = m_MobMap.begin();it != m_MobMap.end();it++) {
+				Enemy* mob = it->first;
+				glm::vec3 MobPos = mob->getPosition();
+				glm::vec3 TowerPos = glm::vec3(Building.x * 96, MobPos.y, Building.y * 96);
+				float d2 = glm::length(MobPos - TowerPos);
+				if (d2 - 768 < 0) {//in
+					towers[Building.x][Building.y]->AddTrackingEnemy(mob);
+				}
+			}
+			towers[Building.x][Building.y]->setPosition(glm::vec3(Building.x * 96, 0, Building.y * 96));
+			towers[Building.x][Building.y]->setlevel(1, m_Scene);
+			m_map->ChangeColor(m_Scene, Building.x, Building.y, 1);
+			Building = glm::ivec2(-1, -1);
 		}
-		towers[Building.x][Building.y]->setPosition(glm::vec3(Building.x * 96, 0, Building.y * 96));
-		towers[Building.x][Building.y]->setlevel(1, m_Scene);
-		m_map->ChangeColor(m_Scene, Building.x, Building.y, 1);
-		Building = glm::ivec2(-1, -1);
 	}
 	#endif
 
 	// Mob path and building destroy
 	static int lvl = 1;
-	lvl = 1 + int(TotalTime / LvlUpPeriod);
+	//lvl = 1 + int(TotalTime / LvlUpPeriod);
 	if (PathTime > PathPeriod)
 	{
 		glm::ivec2 spawn = m_map->DecidePath(m_Scene);
@@ -302,53 +319,62 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		}
 	}
 
+
+	hpBar->UpdateH_PBar(m_Camera.GetComponent<TransformComponent>().Position);
+	hpBar->TakeDamage(-10 * dt);
+
+	static float money = 0;
+	money += dt * 10;
+	if (money > 1)
+	{
+		money--;
+		gold->UpdateGold(1);
+	}
+
+
 	m_Scene->OnUpdate(dt); // Renders the scene
 }
 
 
 void World::MobSpawn(glm::ivec2 spawn, int lvl) {
 	int MobIdx = glm::linearRand(1, 6);
-	MobIdx = 7;
+	MobIdx = 1;
 	Enemy* mob = NULL;
 	switch (MobIdx) {
 		case 1: {//BlueDragon
-			mob = new BlueDragon(m_Scene);
+			mob = new BlueDragon(m_Scene, lvl);
 			mob->_type = 1;
-			break;
-		}
-		case 2: {//FantasyDragon
-			mob = new FantasyDragon(m_Scene);
-			mob->_type = 2;
+			//mob->setRotation(glm::rotate(mob->getRotation(), glm::radians(90.0f), glm::vec3(1.0f, 0.f, 0.f)));
 			break;
 		}
 		case 3: {//MonsterSkull
-			mob = new MonsterSkull(m_Scene);
+			mob = new MonsterSkull(m_Scene, lvl);
 			mob->_type = 3;
 			break;
 		}
 		case 4: {//ShadowDragon
-			mob = new ShadowDragon(m_Scene);
+			mob = new ShadowDragon(m_Scene, lvl);
 			mob->_type = 4;
 			break;
 		}
 		case 5: {//SnowDragon
-			mob = new SnowDragon(m_Scene);
+			mob = new SnowDragon(m_Scene, lvl);
 			mob->_type = 5;
 			break;
 		}
 		case 6: {//WhiteChineseDragon
-			mob = new WhiteChineseDragon(m_Scene);
+			mob = new WhiteChineseDragon(m_Scene, lvl);
 			mob->_type = 6;
 			break;
 		}
 		case 7: {//Yoda
-			mob = new BabyGrogu(m_Scene);
+			mob = new BabyGrogu(m_Scene, 1);
 			mob->_type = 7;
 			//init face toward +z
 			break;
 		}
 		case 8: {//Patrick
-			mob = new Patrick(m_Scene);
+			mob = new Patrick(m_Scene, lvl);
 			mob->_type = 8;
 			break;
 		}
@@ -379,11 +405,20 @@ void World::MobMove(float dt)
 			glm::vec3 MobPos = mob->getPosition();
 
 			glm::vec3 goal = glm::vec3(m_map->pathinfo[map.x][map.y].x * 96, MobPos.y, m_map->pathinfo[map.x][map.y].y * 96);
+			glm::vec3 goal2 = glm::vec3(2400, MobPos.y, 2400);
+
 			glm::vec3 delta = goal - MobPos;
+			glm::vec3 delta2 = goal2 - MobPos;
 			glm::vec3 dir = glm::normalize(delta);
 			float LR, angle;
 			glm::quat rot;
 			switch (MobIdx) {
+			case 1: {
+				LR = (dir.x > 0) ? -1.f : 1.f;
+				angle = glm::dot(dir, glm::vec3(0.f, 0.f, -1.f));
+				rot = glm::rotate(DefaultDir, LR * glm::acos(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+				break;
+			}
 			case 7: {
 				LR = (dir.x > 0) ? 1.f : -1.f;
 				angle = glm::dot(dir, glm::vec3(0.f, 0.f, 1.f));
@@ -398,11 +433,18 @@ void World::MobMove(float dt)
 			}
 			}
 
-			mob->setRotation(rot);
+			//mob->setRotation(rot);
+			
 			glm::ivec2 Mobmap = m_map->Pos2Map(MobPos);
 			glm::vec3 OldMobPos = MobPos;
-			if (glm::length(delta) > 40) {
+			if (glm::length(delta) > 40 && glm::length(delta2) >240) {
 				MobPos += dir * dt * 400.f;
+			}
+			if (glm::length(delta2) <= 240) {
+				hpBar->TakeDamage(mob->getDamage()*dt);
+				if (hpBar->GetHp() <= 0.0) {
+					Application::Get().Close();
+				}
 			}
 			mob->setPosition(MobPos);
 			m_MobMap[mob] = m_map->Pos2Map(MobPos);
@@ -449,7 +491,7 @@ Entity World::CreateCamera()
 	camera.AddComponent<CameraComponent>(Camera(specs));
 
 	auto& transform = camera.GetComponent<TransformComponent>();
-	transform.Position = { 0.0f, 0.0f, 100.f };
+	transform.Position = { 2400.0f, 50.0f, 2400.f };
 	transform.Rotation = glm::quat(glm::vec3{ 0.0f, 180.0f, 0.0f });
 
 	return camera;

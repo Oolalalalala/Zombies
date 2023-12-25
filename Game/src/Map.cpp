@@ -1,6 +1,7 @@
 #include "Map.h"
 #include <cstdlib>
 #include <ctime>
+#include "AssetLibrary.h"
 Map::Map(Ref<Scene> scene, int size) {
 	for (int i = 0;i < size;i++) {
 		for (int j = 0;j < size;j++) {
@@ -16,16 +17,17 @@ Map::Map(Ref<Scene> scene, int size) {
 Entity Map::CreateFloor(Ref<Scene> scene, int i, int j) {
 	Entity quad = scene->CreateEntity("Green Floor");
 
-	if (false) {
+	if (true) {
 		auto& spriteRenderer = quad.AddComponent<SpriteRendererComponent>(); // AddComponent 賦予性質
 		spriteRenderer.Size = glm::vec2(94.f, 94.f);
-		spriteRenderer.Texture = AssetManager::LoadTexture("Texture/floor2.png");
+		spriteRenderer.Texture = AssetLibrary::Get(Asset::OringinalFloor);
+		spriteRenderer.Color = DecideColor(mapinfo[i][j]);
 	}
 	else {
 		auto& spriteRenderer = quad.AddComponent<SpriteRendererComponent>(); // AddComponent 賦予性質
 		spriteRenderer.Size = glm::vec2(94.f, 94.f);
-
 		spriteRenderer.Color = DecideColor(mapinfo[i][j]);
+
 	}
 
 	auto& transform = quad.GetComponent<TransformComponent>();

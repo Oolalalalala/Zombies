@@ -17,10 +17,13 @@
 #include "CannonTower.h"
 #include "PoisonTower.h"
 #include "WizardTower.h"
+#include "H_PBar.h"
+#include "Gold.h"
 
 //Some Controling stuff
 #include "Warning.h"
 #include "Map.h"
+
 
 class World
 {
@@ -79,5 +82,9 @@ private:
 	BlueDragon* bd;
 	BabyGrogu* bg;
 
+	Entity crystal;
+	H_PBar* hpBar;
+
+	Gold* gold;
 };
 
