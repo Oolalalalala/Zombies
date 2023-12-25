@@ -26,15 +26,15 @@ void H_PBar::UpdateH_PBar(glm::vec3 position)
 	auto& transform1 = OriginBar.GetComponent<TransformComponent>();	//GetComponent 取得性質
 	auto& transform2 = PresentBar.GetComponent<TransformComponent>();	//GetComponent 取得性質
 
-	glm::vec3 a = position - glm::vec3(2400,1000,2400);
+	glm::vec3 a = position - glm::vec3(2400,500,2400);
 	glm::vec3 dir = glm::normalize(a);
 	transform2.Rotation = glm::quatLookAt(dir, glm::vec3(0, 1, 0.0f));
 	transform1.Rotation = glm::quatLookAt(dir, glm::vec3(0, 1, 0.0f));
 
 	glm::vec3 left = glm::cross(dir, glm::vec3(0, 1, 0.0f));
 	glm::vec3 d = glm::normalize(left);
-	transform2.Position = glm::vec3(2400, 1000, 2400) + (10000 - hp )* 0.07f *d/2.f;
-	transform1.Position = glm::vec3(2400, 1000, 2400) - hp * 0.07f *d/2.f;
+	transform2.Position = glm::vec3(2400, 500, 2400) + (10000 - hp )* 0.07f *d/2.f;
+	transform1.Position = glm::vec3(2400, 500, 2400) - hp * 0.07f *d/2.f;
 	
 }
 

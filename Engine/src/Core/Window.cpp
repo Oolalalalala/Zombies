@@ -30,6 +30,7 @@ void Window::Initialize(const WindowSpecification& specification)
 		CORE_CRITICAL("Failed to create window");
 	
 	SDL_GL_CreateContext(m_NativeWindow);
+	//SDL_GL_SetSwapInterval(1);
 
 	if (glewInit() != GLEW_OK)
 		CORE_CRITICAL("Failed to initialize GLEW");

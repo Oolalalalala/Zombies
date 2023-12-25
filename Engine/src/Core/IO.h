@@ -26,6 +26,8 @@ public:
 	static glm::vec2 GetMousePosition();
 	static float GetMouseScroll();
 	static glm::vec2 GetWindowSize();
+	static void SetCursorVisibility(bool visible);
+	static void SetCursorPosition(glm::vec2 position);
 
 	static bool IsWindowResized();
 	static bool IsWindowMinimized();

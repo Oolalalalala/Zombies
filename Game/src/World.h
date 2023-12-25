@@ -35,6 +35,7 @@ public:
 	void ClearMap();
 	void MobSpawn(glm::ivec2, int);
 	void MobMove(float);
+	void SetEndGameCallback(std::function<void(int)> callback);
 	glm::quat df[9];
 
 private:
@@ -87,5 +88,10 @@ private:
 	H_PBar* hpBar;
 
 	Gold* gold;
+
+	float TotalTime = 0.0f;
+
+	std::function<void(int)> m_EndGameCallback;
+	bool m_IsCursorMode;
 };
 

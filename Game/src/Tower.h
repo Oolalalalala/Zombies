@@ -8,7 +8,7 @@ class Tower
 {
 public:
 	Tower(Ref<Scene> scene, double hp, double damage, Asset modelAsset);
-	~Tower();
+	virtual ~Tower();
 
 	void setPosition(glm::vec3 position);
 	void Destroy(Ref<Scene> scene);

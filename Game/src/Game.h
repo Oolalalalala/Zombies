@@ -1,9 +1,17 @@
 #pragma once
 
 #include "Engine.h"
+#include <future>
+
 #include "World.h"
 #include "Start.h"
+#include "Loading.h"
+#include "Ending.h"
 
+enum class GameState
+{
+	None = 0, Menu, Loading, GameCreate, Game, GameDestory, Ending
+};
 
 class Game : public Application
 {
@@ -16,10 +24,17 @@ public:
 	virtual void OnDestroy();
 
 	void BeginGame();
+	void GoBackMenu();
+	void EndGame(int score);
+
 private:
-	Ref<World> m_world;
+	Ref<World> m_World;
+	Ref<Loading> m_Loading;
 	Ref<Start> m_Start;
-	bool m_GameStarted = false;
+	Ref<Ending> m_Ending;
+	GameState m_State;
+
+	std::future<Ref<World>> m_LoadingFuture;
 };
 
 Application* CreateApplication()

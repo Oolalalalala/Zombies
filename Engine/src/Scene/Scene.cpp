@@ -83,6 +83,7 @@ void Scene::OnUpdate(float dt)
 	RendererAPI::Clear();
 
 
+	RendererAPI::SetBackFaceCulling(true);
 	m_Renderer->BeginScene(mainCamera);
 
 	// Meshes
@@ -134,7 +135,8 @@ void Scene::OnUpdate(float dt)
 	m_Renderer->EndScene();
 
 	
-
+	
+	RendererAPI::SetBackFaceCulling(false);
 	Renderer2D::BeginScene(mainCamera, windowSize);
 
 
@@ -223,6 +225,8 @@ void Scene::OnUpdate(float dt)
 						 * glm::scale(glm::mat4(1.0f), glm::vec3(transform.Scale));
 
 			Renderer2D::DrawString(text.Text, AssetManager::GetFont(text.Font), text.FontSize, text.OutlineThickness, tf, text.Color, text.OutlineColor);
+			//position = center - text.Size * glm::vec2(transform.Scale) * UI.Pivot * 0.5f;
+			//Renderer2D::DrawString(text.Text, AssetManager::GetFont(text.Font), text.FontSize, text.Size, text.Alignment, position, roll, glm::vec2(transform.Scale), text.Color, text.OutlineThickness, text.OutlineColor);
 		}
 
 	}

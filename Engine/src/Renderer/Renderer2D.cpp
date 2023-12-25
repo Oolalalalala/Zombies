@@ -326,12 +326,6 @@ void Renderer2D::EndScene()
     
    // CORE_ERROR("Character count:{0}, Time(ms):{1}", s_Data.CharacterCount, timer.Tick() * 1000.0);
 
-    // TODO : remove
-    GLenum err;
-    while((err = glGetError()) != GL_NO_ERROR)
-    {
-        CORE_ERROR("OpenGL error");
-    }
 }
 
 void Renderer2D::FlushQuads()

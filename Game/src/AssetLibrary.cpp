@@ -192,8 +192,69 @@ void AssetLibrary::ShutDown()
 	AssetManager::UnloadFont(s_Assets[Asset::OpenSansFont]);
 
 
-
-
+		
+	AssetManager::UnloadMesh(s_ModelPrefabs[Asset::spongebob_squarepants_patrick].GetComponent<MeshRendererComponent>().Mesh);
+	AssetManager::UnloadMaterial(s_Assets[Asset::PatrickMaterial]);
+	AssetManager::UnloadTexture(s_Assets[Asset::PatrickTexture]);
+	
+	AssetManager::UnloadMesh(s_ModelPrefabs[Asset::baby_yoda_grogu_with_glasses].GetComponent<MeshRendererComponent>().Mesh);
+	AssetManager::UnloadMaterial(s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial1]);
+	AssetManager::UnloadTexture(s_Assets[Asset::baby_yoda_grogu_with_glassesTexture1]);
+	AssetManager::UnloadMaterial(s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial2]);
+	AssetManager::UnloadTexture(s_Assets[Asset::baby_yoda_grogu_with_glassesTexture2]); 
+	AssetManager::UnloadMaterial(s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial3]);
+	AssetManager::UnloadTexture(s_Assets[Asset::baby_yoda_grogu_with_glassesTexture3]);
+	
+	AssetManager::UnloadMesh(s_ModelPrefabs[Asset::ArrowModel].GetComponent<MeshRendererComponent>().Mesh);
+	AssetManager::UnloadMaterial(s_Assets[Asset::ArrowMaterial]);
+	AssetManager::UnloadTexture(s_Assets[Asset::ArrowTexture]);
+	
+	AssetManager::UnloadMesh(s_ModelPrefabs[Asset::CannonBallModel].GetComponent<MeshRendererComponent>().Mesh);
+	AssetManager::UnloadMaterial(s_Assets[Asset::CannonBallMaterial]);
+	AssetManager::UnloadTexture(s_Assets[Asset::CannonBallTexture]);
+	
+	AssetManager::UnloadMesh(s_ModelPrefabs[Asset::MageBallModel].GetComponent<MeshRendererComponent>().Mesh);
+	AssetManager::UnloadMaterial(s_Assets[Asset::MageBallMaterial]);
+	AssetManager::UnloadTexture(s_Assets[Asset::MageBallTexture]);
+	
+	AssetManager::UnloadMesh(s_ModelPrefabs[Asset::LightBeamModel].GetComponent<MeshRendererComponent>().Mesh);
+	AssetManager::UnloadMaterial(s_Assets[Asset::LightBeamMaterial]);
+	AssetManager::UnloadTexture(s_Assets[Asset::LightBeamTexture]);
+	
+	AssetManager::UnloadMesh(s_ModelPrefabs[Asset::stylized_crystal].GetComponent<MeshRendererComponent>().Mesh);
+	AssetManager::UnloadMaterial(s_Assets[Asset::stylized_crystalMaterial]);
+	AssetManager::UnloadTexture(s_Assets[Asset::stylized_crystalTexture]);
+	
+	AssetManager::UnloadTexture(s_Assets[Asset::MobPathTexture]);
+	AssetManager::UnloadTexture(s_Assets[Asset::OringinalFloor]);
+	
+	AssetManager::UnloadSkinnedMesh(s_ModelPrefabs[Asset::white_chinese_dragon].GetComponent<SkinnedMeshRendererComponent>().SkinnedMesh);
+	AssetManager::UnloadMaterial(s_Assets[Asset::white_chinese_dragonMaterial]);
+	AssetManager::UnloadTexture(s_Assets[Asset::white_chinese_dragonTexture]);
+	
+	AssetManager::UnloadSkinnedMesh(s_ModelPrefabs[Asset::snow_dragon].GetComponent<SkinnedMeshRendererComponent>().SkinnedMesh);
+	AssetManager::UnloadTexture(s_Assets[Asset::snow_dragonTexture]);
+	AssetManager::UnloadMaterial(s_Assets[Asset::snow_dragonMaterial]);
+	
+	AssetManager::UnloadSkinnedMesh(s_ModelPrefabs[Asset::shadow_dragon].GetComponent<SkinnedMeshRendererComponent>().SkinnedMesh);
+	AssetManager::UnloadTexture(s_Assets[Asset::shadow_dragonTexture]);
+	AssetManager::UnloadMaterial(s_Assets[Asset::shadow_dragonMaterial]);
+	
+	AssetManager::UnloadSkinnedMesh(s_ModelPrefabs[Asset::monster_low_poly].GetComponent<SkinnedMeshRendererComponent>().SkinnedMesh);
+	AssetManager::UnloadTexture(s_Assets[Asset::monster_low_polyTexture]);
+	AssetManager::UnloadMaterial(s_Assets[Asset::monster_low_polyMaterial]);
+	
+	AssetManager::UnloadSkinnedMesh(s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<SkinnedMeshRendererComponent>().SkinnedMesh);
+	AssetManager::UnloadTexture(s_Assets[Asset::dragon_blue_low_polyTexture]);
+	AssetManager::UnloadMaterial(s_Assets[Asset::dragon_blue_low_polyMaterial]);
+	
+	AssetManager::UnloadSkinnedMesh(s_ModelPrefabs[Asset::monster_skull_hight_poly].GetComponent<SkinnedMeshRendererComponent>().SkinnedMesh);
+	AssetManager::UnloadTexture(s_Assets[Asset::monster_skull_hight_polyTexture1]);
+	AssetManager::UnloadMaterial(s_Assets[Asset::monster_skull_hight_polyMaterial1]);
+	AssetManager::UnloadTexture(s_Assets[Asset::monster_skull_hight_polyTexture2]);
+	AssetManager::UnloadMaterial(s_Assets[Asset::monster_skull_hight_polyMaterial2]);
+	AssetManager::UnloadTexture(s_Assets[Asset::monster_skull_hight_polyTexture3]);
+	AssetManager::UnloadMaterial(s_Assets[Asset::monster_skull_hight_polyMaterial3]);
 }
 
 AssetHandle AssetLibrary::Get(Asset asset)

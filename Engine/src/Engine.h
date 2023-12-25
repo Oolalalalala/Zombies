@@ -11,3 +11,5 @@
 #include "Core/Base.h"
 #include "Core/IO.h"
 #include "Core/Log.h"
+
+#include "Audio/AudioMixer.h"

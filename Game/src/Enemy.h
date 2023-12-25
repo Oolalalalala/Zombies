@@ -6,7 +6,7 @@ class Enemy
 {
 public:
 	Enemy(Ref<Scene> scene, int level, Asset modelAsset);
-	~Enemy();
+	virtual ~Enemy();
 	glm::vec3 getPosition();
 	glm::quat getRotation();
 	void setPosition(glm::vec3 position);
