@@ -7,7 +7,7 @@ Enemy::Enemy(Ref<Scene> scene, int level, Asset modelAsset) {
 	if (_entity.HasComponent<SkinnedMeshRendererComponent>())
 		_entity.GetComponent<SkinnedMeshRendererComponent>().Enabled = true;
 
-	_hp = 100* level;
+	_hp = 300* level;
 	_damage = 100 * level;
 	_level = level;
 	_entity.GetComponent<TransformComponent>().Scale *=_level*1.0f;
@@ -64,4 +64,9 @@ double Enemy::getDamage()
 double Enemy::gethp()
 {
 	return _hp;
+}
+
+int Enemy::getLevel()
+{
+	return _level;
 }

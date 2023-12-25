@@ -50,6 +50,7 @@ World::World()
 	transform.Position = { 2400, 00, 2400 };
 	transform.Scale *= 5.0f;
 
+	m_Time = CreateTime();
 	gold = new Gold(m_Scene);
 }
 
@@ -100,7 +101,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 	if (IO::IsKeyPressed(KeyCode::D))
 		cameraTransform.Position += speed * glm::cross(dir, glm::vec3(0.0f, 1.0f, 0.0f)) * dt;
 	if (IO::IsKeyPressed(KeyCode::Space))
-		if (cameraTransform.Position.y < 512) cameraTransform.Position.y += speed * dt;
+		if (cameraTransform.Position.y < 250) cameraTransform.Position.y += speed * dt;
 	if (IO::IsKeyPressed(KeyCode::LeftShift))
 		if (cameraTransform.Position.y > 10) cameraTransform.Position.y -= speed * dt;
 	#endif
@@ -238,7 +239,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		NowBuilding->setTransparent();
 	}
 	if (IO::IsMouseButtonDown(MouseButton::Right) && Building != glm::ivec2(-1, -1)) {
-		if (gold->gold < 100)
+		if (gold->GetGold() < 100)
 		{
 			w->Destroy(m_Scene);
 			delete w;
@@ -246,7 +247,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		}
 		else
 		{
-			gold->gold -= 100;
+			gold->UpdateGold(-100);
 			NowBuilding->Destroy(m_Scene);
 			switch (BuildingIdx) {
 			case 0: {
@@ -341,6 +342,8 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		gold->UpdateGold(1);
 	}
 
+	auto& text = m_Time.GetComponent<TextRendererComponent>();
+	text.Text = "TIME:" + std::to_string(int(TotalTime));
 
 
 	w->update(m_Scene, dt);
@@ -352,7 +355,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 
 void World::MobSpawn(glm::ivec2 spawn, int lvl) {
 	int MobIdx = glm::linearRand(1, 6);
-	MobIdx = lvl;
+	MobIdx = 5;
 	Enemy* mob = NULL;
 	switch (MobIdx) {
 		case 1: {//BlueDragon
@@ -409,6 +412,7 @@ void World::MobMove(float dt)
 					}
 				}
 			}
+			gold->UpdateGold(mob->getLevel()*50);
 			mob->Destroy(m_Scene);
 			delete mob;
 			it = m_MobMap.erase(it);
@@ -658,4 +662,25 @@ Entity World::CreateSound()
 
 	return sound;
 }
+
+Entity World::CreateTime()
+{
+	Entity Time= m_Scene->CreateEntity("Time");
+	auto& transform = Time.GetComponent<TransformComponent>();
+	transform.Scale *= 2.f;
+
+	auto& UI = Time.AddComponent<UIElementComponent>(); //加UIElementComponent讓物體變成2D的，物體位置由下面三行決定，Transform.Position沒用了
+	UI.Anchor = glm::vec2(-1.0f, 1.0f);
+	UI.Pivot = glm::vec2(-1.0f, 1.0f);
+	UI.Offset = glm::vec2(10.0f, -10.0f);
+
+	auto& textRenderer = Time.AddComponent<TextRendererComponent>();
+	textRenderer.Text = "TIME=0";
+	textRenderer.Font = AssetLibrary::Get(Asset::OpenSansFont);
+	textRenderer.FontSize = 20.0f;
+	textRenderer.Size = glm::vec2(100.0f, 30.0f);
+	textRenderer.OutlineColor = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+	textRenderer.OutlineThickness = 0.16f; // In the range [0, 0.3f] (not sure)
+	return Time;
+} 
 
