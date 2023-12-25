@@ -630,7 +630,7 @@ Entity World::CreateCamera()
 	// Create a camera
 	Entity camera = m_Scene->CreateEntity("Camera");
 	PerspectiveCameraSpecification specs;
-	specs.FarPlane = 800.f;
+	specs.FarPlane = 1000.f;
 	camera.AddComponent<CameraComponent>(Camera(specs));
 
 	auto& transform = camera.GetComponent<TransformComponent>();
