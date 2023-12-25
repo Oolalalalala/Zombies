@@ -12,6 +12,7 @@ class CannonTower :public Tower
 public:
 	CannonTower() = default;
 	CannonTower(Ref<Scene> scene);
+	~CannonTower();
 
 	void OnUpdate(float dt) override;
 	void AddTrackingEnemy(Enemy* target) override;

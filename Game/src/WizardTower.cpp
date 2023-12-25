@@ -6,6 +6,13 @@ WizardTower::WizardTower(Ref<Scene> scene)
 	:Tower(scene, 1.0, 100.0, Asset::WizardTowerLevel1Model)
 {
 }
+WizardTower::~WizardTower()
+{
+	for (auto it : m_AttackList)
+	{
+		AssetLibrary::DestoryModel(it.second.LightBeam);
+	}
+}
 void WizardTower::OnUpdate(float dt)
 {
 	if (m_TargetList.size() && m_AttackList.size() < m_MaxConcurrentTarget)

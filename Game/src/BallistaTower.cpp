@@ -9,6 +9,13 @@ BallistaTower::BallistaTower(Ref<Scene> scene)
 	:Tower(scene, 100.0, 100.0, Asset::BallistaTowerLevel1Model)
 {
 }
+BallistaTower::~BallistaTower()
+{
+	for (auto it : m_AttackList)
+	{
+		AssetLibrary::DestoryModel(it.first);
+	}
+}
 
 void BallistaTower::OnUpdate(float dt)
 {

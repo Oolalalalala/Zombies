@@ -13,6 +13,7 @@ class BallistaTower :public Tower
 public:
 	BallistaTower() = default;
 	BallistaTower(Ref<Scene> scene);
+	~BallistaTower();
 
 	void OnUpdate(float dt) override;
 	void AddTrackingEnemy(Enemy* target) override;

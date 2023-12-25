@@ -15,6 +15,7 @@ class PoisonTower :public Tower
 public:
 	PoisonTower() = default;
 	PoisonTower(Ref<Scene> scene);
+	~PoisonTower();
 
 	void OnUpdate(float dt) override;
 	void AddTrackingEnemy(Enemy* target) override;

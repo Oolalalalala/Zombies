@@ -6,6 +6,13 @@ CannonTower::CannonTower(Ref<Scene> scene)
 	:Tower(scene, 100.0, 100.0, Asset::CannonTowerLevel1Model)
 {
 }
+CannonTower::~CannonTower()
+{
+	for (auto it : m_AttackList)
+	{
+		AssetLibrary::DestoryModel(it.first);
+	}
+}
 void CannonTower::OnUpdate(float dt)
 {
 	if (m_TargetList.size())

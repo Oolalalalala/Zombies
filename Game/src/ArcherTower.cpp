@@ -9,6 +9,13 @@ ArcherTower::ArcherTower(Ref<Scene> scene)
 	:Tower(scene, 100.0, 100.0, Asset::ArcherTowerLevel1Model)
 {
 }
+ArcherTower::~ArcherTower()
+{
+	for (auto it : m_AttackList)
+	{
+		AssetLibrary::DestoryModel(it.first);
+	}
+}
 void ArcherTower::OnUpdate(float dt)
 {
 	if (m_TargetList.size())

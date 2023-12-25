@@ -9,6 +9,14 @@ PoisonTower::PoisonTower(Ref<Scene> scene)
 {
 }
 
+PoisonTower::~PoisonTower()
+{
+	for (auto it : m_AttackList)
+	{
+		AssetLibrary::DestoryModel(it.first);
+	}
+}
+
 void PoisonTower::OnUpdate(float dt)
 {
 	if (m_TargetList.size())

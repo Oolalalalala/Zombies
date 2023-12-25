@@ -14,6 +14,7 @@ class WizardTower :public Tower
 public:
 	WizardTower() = default;
 	WizardTower(Ref<Scene> scene);
+	~WizardTower();
 
 	void OnUpdate(float dt) override;
 	void AddTrackingEnemy(Enemy* target) override;

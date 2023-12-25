@@ -131,15 +131,6 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 
 	// Some sound stuff
 	#if 1
-	static bool isMusicPlaying = false;
-	if (IO::IsKeyDown(KeyCode::M))
-	{
-		if (isMusicPlaying)
-			m_Music.GetComponent<MusicSourceComponent>().Stop = true;
-		else
-			m_Music.GetComponent<MusicSourceComponent>().Begin = true;
-		isMusicPlaying = !isMusicPlaying;
-	}
 	if (IO::IsKeyReleased(KeyCode::R))
 		m_Sound.GetComponent<SoundSourceComponent>().Begin = true;
 	#endif
@@ -518,7 +509,7 @@ Entity World::CreateMusic()
 	Entity music = m_Scene->CreateEntity("Music");
 	auto& source = music.AddComponent<MusicSourceComponent>();
 	source.Music = AssetManager::LoadMusic("Sound/music.mp3");
-	source.Volume = 0.9f;
+	source.Volume = 0.5f;
 	source.FadeIn = 2.0f;
 	source.FadeOut = 5.0f;
 	source.Begin = true;
