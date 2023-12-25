@@ -106,18 +106,26 @@ void ArcherTower::changeModel(Ref<Scene> scene)
 	case 1:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::ArcherTowerLevel1Model);
+		m_FireInterval = 0.8f;
+		m_ArrowSpeed = 600.0f;
 		break;
 	case 2:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::ArcherTowerLevel2Model);
+		m_FireInterval = 0.7f;
+		m_ArrowSpeed = 800.0f;
 		break;
 	case 3:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::ArcherTowerLevel3Model);
+		m_FireInterval = 0.6f;
+		m_ArrowSpeed = 1000.0f;
 		break;
 	case 4:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::ArcherTowerLevel4Model);
+		m_FireInterval = 0.5f;
+		m_ArrowSpeed = 1200.0f;
 		break;
 	}
 

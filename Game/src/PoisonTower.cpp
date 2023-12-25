@@ -112,18 +112,22 @@ void PoisonTower::changeModel(Ref<Scene> scene)
 	case 1:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::PoisonTowerLevel1Model);
+		m_FireInterval = 0.6f;
 		break;
 	case 2:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::PoisonTowerLevel2Model);
+		m_FireInterval = 0.47f;
 		break;
 	case 3:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::PoisonTowerLevel3Model);
+		m_FireInterval = 0.35f;
 		break;
 	case 4:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::PoisonTowerLevel4Model);
+		m_FireInterval = 0.2f;
 		break;
 	}
 	_entity.GetComponent<TransformComponent>() = oldTransform;

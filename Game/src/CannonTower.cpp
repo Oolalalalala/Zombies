@@ -97,18 +97,22 @@ void CannonTower::changeModel(Ref<Scene> scene)
 	case 1:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::CannonTowerLevel1Model);
+		m_FireInterval = 1.2f;
 		break;
 	case 2:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::CannonTowerLevel2Model);
+		m_FireInterval = 1.0f;
 		break;
 	case 3:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::CannonTowerLevel3Model);
+		m_FireInterval = 0.8f;
 		break;
 	case 4:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::CannonTowerLevel4Model);
+		m_FireInterval = 0.6f;
 		break;
 	}
 	_entity.GetComponent<TransformComponent>() = oldTransform;

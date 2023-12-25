@@ -26,7 +26,6 @@ protected:
 	std::deque<Enemy*> m_TargetList;
 	std::unordered_map<Enemy*, LightBeamData> m_AttackList;
 
-	float m_CannonBallSpeed = 300.0f;
-	uint32_t m_MaxConcurrentTarget = 3;
+	uint32_t m_MaxConcurrentTarget = 2;
 	const static glm::vec3 s_AttackPointOffset;
 };

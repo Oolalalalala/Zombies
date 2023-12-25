@@ -45,7 +45,7 @@ void WizardTower::OnUpdate(float dt)
 		transform.Scale.y = glm::length(delta) * 0.5f;
 		transform.Rotation = glm::quat(glm::vec3(0.0f, 1.0f, 0.0f), dir);
 
-		target->takeDamage(_damage * dt);
+		target->takeDamage(_damage * dt / glm::pow(m_AttackList.size(), 0.3));
 
 		it++;
 	}
@@ -87,18 +87,22 @@ void WizardTower::changeModel(Ref<Scene> scene)
 	case 1:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::WizardTowerLevel1Model);
+		m_MaxConcurrentTarget = 2;
 		break;
 	case 2:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::WizardTowerLevel2Model);
+		m_MaxConcurrentTarget = 3;
 		break;
 	case 3:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::WizardTowerLevel3Model);
+		m_MaxConcurrentTarget = 4;
 		break;
 	case 4:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::WizardTowerLevel4Model);
+		m_MaxConcurrentTarget = 5;
 		break;
 	}
 	_entity.GetComponent<TransformComponent>() = oldTransform;

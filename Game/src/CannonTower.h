@@ -24,8 +24,8 @@ protected:
 	std::vector<Enemy*> m_TargetList;
 	std::unordered_map<Entity, CannonAttackTarget> m_AttackList;
 
-	float m_FireInterval = 0.7f;
-	float m_CannonBallSpeed = 300.0f;
+	float m_FireInterval = 1.2f;
+	float m_CannonBallSpeed = 700.0f;
 	float m_Timer = 0.0f;
 	const static glm::vec3 s_AttackPointOffset;
 };

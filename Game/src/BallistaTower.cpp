@@ -61,7 +61,7 @@ void BallistaTower::OnUpdate(float dt)
 		if (glm::length2(delta) < m_ArrowSpeed * m_ArrowSpeed * dt * dt)
 		{
 			if (target)
-				target->takeDamage(_damage);
+				target->takeDamage(_damage * 0.5f);
 
 			AssetLibrary::DestoryModel(arrow);
 			it = m_AttackList.erase(it);
@@ -106,18 +106,26 @@ void BallistaTower::changeModel(Ref<Scene> scene)
 	case 1:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::BallistaTowerLevel1Model);
+		m_FireInterval = 0.15f;
+		m_ArrowSpeed = 500.0f;
 		break;
 	case 2:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::BallistaTowerLevel2Model);
+		m_FireInterval = 0.10f;
+		m_ArrowSpeed = 800.0f;
 		break;
 	case 3:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::BallistaTowerLevel3Model);
+		m_FireInterval = 0.07f;
+		m_ArrowSpeed = 1200.0f;
 		break;
 	case 4:
 		Destroy(scene);
 		_entity = AssetLibrary::GetModel(Asset::BallistaTowerLevel4Model);
+		m_FireInterval = 0.05f;
+		m_ArrowSpeed = 1500.0f;
 		break;
 	}
 	_entity.GetComponent<TransformComponent>() = oldTransform;
