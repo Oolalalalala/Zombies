@@ -37,7 +37,7 @@ enum class Asset
 	LightBeamTexture, LightBeamMaterial, LightBeamModel,
 
 	
-	MobPathTexture,OringinalFloor,
+	OringinalFloor,
 
 	stylized_crystal,stylized_crystalTexture,stylized_crystalMaterial,
 	

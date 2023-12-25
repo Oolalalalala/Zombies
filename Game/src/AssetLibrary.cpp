@@ -128,7 +128,6 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	//FLOOR
 	//FLOOR
 	//FLOOR
-	s_Assets[Asset::MobPathTexture] = AssetManager::LoadTexture("Texture/monsfloor.png");
 	s_Assets[Asset::OringinalFloor] = AssetManager::LoadTexture("Texture/originalfloor.png");
 	//CRYSTAL
 	s_Assets[Asset::stylized_crystalTexture] = AssetManager::LoadTexture("Model/stylized_crystal/textures/material_baseColor.jpeg");
@@ -225,7 +224,6 @@ void AssetLibrary::ShutDown()
 	AssetManager::UnloadMaterial(s_Assets[Asset::stylized_crystalMaterial]);
 	AssetManager::UnloadTexture(s_Assets[Asset::stylized_crystalTexture]);
 	
-	AssetManager::UnloadTexture(s_Assets[Asset::MobPathTexture]);
 	AssetManager::UnloadTexture(s_Assets[Asset::OringinalFloor]);
 	
 	AssetManager::UnloadSkinnedMesh(s_ModelPrefabs[Asset::white_chinese_dragon].GetComponent<SkinnedMeshRendererComponent>().SkinnedMesh);

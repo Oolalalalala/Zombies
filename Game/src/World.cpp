@@ -29,7 +29,6 @@ World::World()
 	m_Camera = CreateCamera();
 	m_Text = CreateText(); // 創造2D文字的範例
 	m_Music = CreateMusic();
-	m_Sound = CreateSound();
 	m_SoundEffect1 = CreateSoundEffect(1);
 	m_SoundEffect2 = CreateSoundEffect(2);
 	m_SoundEffect3 = CreateSoundEffect(3);
@@ -208,11 +207,6 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 	}
 	#endif
 
-	// Some sound stuff
-	#if 1
-	if (IO::IsKeyReleased(KeyCode::R))
-		m_Sound.GetComponent<SoundSourceComponent>().Begin = true;
-	#endif
 
 	// Some construct stuff
 	#if 1
@@ -615,8 +609,8 @@ void World::SetEndGameCallback(std::function<void(int)> callback)
 void World::ClearMap()
 {
 	//super inefficient
-	for (int i = 1;i <= 50;i++)
-		for (int j = 1;j <= 50;j++) {
+	for (int i = 1;i < 50;i++)
+		for (int j = 1;j < 50;j++) {
 			if (m_map->mapinfo[i][j] == 4 && towers[i][j] != NULL) {
 				towers[i][j]->Destroy(m_Scene);
 				delete towers[i][j];
@@ -773,18 +767,6 @@ Entity World::CreateMusic()
 	source.Begin = true;
 
 	return music;
-}
-
-Entity World::CreateSound()
-{
-	Entity sound = m_Scene->CreateEntity("sound");
-	auto& source = sound.AddComponent<SoundSourceComponent>();
-	source.Sound = AssetManager::LoadSound("Sound/scary-swoosh-142323.mp3");
-	source.Volume = 1.0f;
-	source.FadeIn = 0.0f;
-	source.FadeOut = 0.0f;
-
-	return sound;
 }
 
 Entity World::CreateSoundEffect(int idx)

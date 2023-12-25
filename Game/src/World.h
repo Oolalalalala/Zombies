@@ -47,7 +47,6 @@ private:
 	Entity CreateModelByCopying(Entity copySource);
 	Entity CreateText();
 	Entity CreateMusic();
-	Entity CreateSound();
 	Entity CreateSoundEffect(int idx);
 	Entity CreateFloor(int i, int j);
 	Entity CreateTime();
