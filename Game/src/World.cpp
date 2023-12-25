@@ -52,7 +52,7 @@ World::World()
 	crystal.GetComponent<MeshRendererComponent>().Enabled = true;
 	auto& transform = crystal.GetComponent<TransformComponent>();
 	transform.Position = { 2400, 00, 2400 };
-	transform.Scale *= 5.0f;
+	transform.Scale *= 3.0f;
 
 	m_Time = CreateTime();
 	gold = new Gold(m_Scene);
@@ -93,8 +93,12 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		m_IsCursorMode = !m_IsCursorMode;
 		IO::SetCursorVisibility(m_IsCursorMode);
 	}
-
-	glm::vec3 lookat;
+	
+	glm::vec3 dir = glm::inverse(glm::toMat4(cameraTransform.Rotation)) * glm::vec4(0.f, 0.f, 1.f, 0.0f);
+	glm::vec3 lookat = dir;
+	lookat = glm::normalize(lookat);
+	dir.y = 0;
+	dir = glm::normalize(dir);
 
 	if (!m_IsCursorMode)
 	{
@@ -143,11 +147,6 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 
 		// Rotation to direction
 #if 1
-		glm::vec3 dir = glm::inverse(glm::toMat4(cameraTransform.Rotation)) * glm::vec4(0.f, 0.f, 1.f, 0.0f);
-		lookat = dir;
-		dir.y = 0;
-		dir = glm::normalize(dir);
-		lookat = glm::normalize(lookat);
 
 	if (IO::IsKeyPressed(KeyCode::W))
 		cameraTransform.Position += speed * dir * dt;
@@ -189,7 +188,6 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 
 	// FPS counter
 	#if 1
-	static float TotalTime = 0;
 	static float PathTime = 0;
 	static float time = 0;
 	static int cnt = 0;
@@ -565,7 +563,7 @@ void World::MobMove(float dt)
 			if (glm::length(delta2) <= 240) {
 				hpBar->TakeDamage(mob->getDamage()*dt);
 				if (hpBar->GetHp() <= 0.0) {
-					m_EndGameCallback(0/*Put score here*/);
+					m_EndGameCallback(TotalTime);
 				}
 			}
 			mob->setPosition(MobPos);
