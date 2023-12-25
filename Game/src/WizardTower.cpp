@@ -45,7 +45,7 @@ void WizardTower::OnUpdate(float dt)
 		transform.Scale.y = glm::length(delta) * 0.5f;
 		transform.Rotation = glm::quat(glm::vec3(0.0f, 1.0f, 0.0f), dir);
 
-		target->takeDamage(_damage * dt / glm::pow(m_AttackList.size(), 0.3));
+		target->takeDamage(0.35 * _damage * dt / glm::pow((float)m_AttackList.size(), 0.3f));
 
 		it++;
 	}

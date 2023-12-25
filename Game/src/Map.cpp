@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <ctime>
 #include "AssetLibrary.h"
+#include "glm/gtc/random.hpp"
+
 Map::Map(Ref<Scene> scene, int size) {
 	for (int i = 0;i < size;i++) {
 		for (int j = 0;j < size;j++) {
@@ -97,8 +99,9 @@ glm::vec4 Map::DecideColor(int status) {
 }
 
 glm::ivec2 Map::DecidePath(Ref<Scene> scene) {
-	srand(time(NULL));
-	int test = ((rand()%200)*67) % 200;
+	//srand(time(NULL));
+	//int test = ((rand()%200)*67) % 200;
+	int test = glm::linearRand(0, 199);
 	//start is a random point on edge, end is always on core
 	glm::ivec2 start(0, 0), end(25, 25);
 	if (test < 50)       start = glm::ivec2(0, test);
@@ -108,12 +111,14 @@ glm::ivec2 Map::DecidePath(Ref<Scene> scene) {
 	glm::ivec2 ans = start;
 
 	while (start.x != end.x || start.y != end.y) {
+		if (mapinfo[start.x][start.y] == 4) break;
 		mapinfo[start.x][start.y] = 4;
 		ChangeColor(scene, start.x, start.y, 4);
 		int delta_x = start.x - end.x;
 		int delta_z = start.y - end.y;
 		int ham_dis = abs(delta_x) + abs(delta_z);
-		int togo = rand() % ham_dis;
+		//int togo = rand() % ham_dis;
+		int togo = glm::linearRand(0, ham_dis - 1);
 		if (togo < abs(delta_x)) {
 			int d = (delta_x > 0) ? 1 : -1;
 			pathinfo[start.x][start.y] = glm::ivec2(start.x - d, start.y);

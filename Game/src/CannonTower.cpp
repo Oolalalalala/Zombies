@@ -53,7 +53,7 @@ void CannonTower::OnUpdate(float dt)
 		if (glm::length2(delta) < m_CannonBallSpeed * m_CannonBallSpeed * dt * dt)
 		{
 			if (target)
-				target->takeDamage(_damage);
+				target->takeDamage(_damage * 1.5f);
 			AssetLibrary::DestoryModel(cannonBall);
 			it = m_AttackList.erase(it);
 		}

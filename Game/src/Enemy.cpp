@@ -10,7 +10,7 @@ Enemy::Enemy(Ref<Scene> scene, int level, Asset modelAsset) {
 	_hp = 300* level;
 	_damage = 100 * level;
 	_level = level;
-	_entity.GetComponent<TransformComponent>().Scale *=_level*1.0f;
+	_entity.GetComponent<TransformComponent>().Scale *= 5 * (1 - glm::exp(0.05f - 0.05f * _level)) + 1;
 
 }
 Enemy::~Enemy(){

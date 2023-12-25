@@ -54,9 +54,9 @@ void PoisonTower::OnUpdate(float dt)
 
 		glm::vec3 delta = targetPos - ballPos;
 		glm::vec3 dir = glm::normalize(delta);
-		if (airTime >= 2.5f)
+		if (airTime >= 1.75f)
 		{
-			velocity = glm::mix(dir * m_MageBallTrackingSpeed, velocity, exp((2.5 - airTime) * 0.03));
+			velocity = glm::mix(dir * m_MageBallTrackingSpeed, velocity, exp((1.75 - airTime) * 0.03));
 		}
 		else
 			velocity += dir * m_MageBallAcceleration * dt;
@@ -68,7 +68,7 @@ void PoisonTower::OnUpdate(float dt)
 		if (glm::length2(delta) < glm::length2(velocity) * dt)
 		{
 			if (target)
-				target->takeDamage(_damage);
+				target->takeDamage(_damage * 0.7f);
 			AssetLibrary::DestoryModel(mageBall);
 			it = m_AttackList.erase(it);
 		}

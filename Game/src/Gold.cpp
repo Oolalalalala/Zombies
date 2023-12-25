@@ -10,7 +10,7 @@ Gold::Gold(Ref<Scene> scene)
 	auto& UI = block.AddComponent<UIElementComponent>(); //加UIElementComponent讓物體變成2D的，物體位置由下面三行決定，Transform.Position沒用了
 	UI.Anchor = glm::vec2(+1.0f, +1.0f);
 	UI.Pivot = glm::vec2(+1.0f, +1.0f);
-	UI.Offset = glm::vec2(-10.0f, -10.0f);
+	UI.Offset = glm::vec2(-50.0f, -10.0f);
 
 	auto& textRenderer = block.AddComponent<TextRendererComponent>();
 	textRenderer.Text = "GOLD=0";

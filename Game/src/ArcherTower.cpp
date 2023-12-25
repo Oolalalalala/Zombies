@@ -30,7 +30,7 @@ void ArcherTower::OnUpdate(float dt)
 			Entity arrow = AssetLibrary::GetModel(Asset::ArrowModel);
 			auto& transform = arrow.GetComponent<TransformComponent>();
 			transform.Position = _entity.GetComponent<TransformComponent>().Position + s_AttackPointOffset;
-			transform.Scale *= 0.5f;
+			transform.Scale *= 0.8f;
 			arrow.GetComponent<MeshRendererComponent>().Enabled = true;
 			m_AttackList[arrow].Target = target;
 		}
@@ -60,7 +60,7 @@ void ArcherTower::OnUpdate(float dt)
 		if (glm::length2(delta) < m_ArrowSpeed * m_ArrowSpeed * dt * dt)
 		{
 			if (target)
-				target->takeDamage(_damage);
+				target->takeDamage(_damage * 0.7);
 
 			AssetLibrary::DestoryModel(arrow);
 			it = m_AttackList.erase(it);

@@ -36,7 +36,7 @@ World::World()
 
 	NowBuilding = new ArcherTower(m_Scene);
 	NowBuilding->setPosition(glm::vec3(0, 0, 0));
-	NowBuilding->setlevel(0, m_Scene);
+	NowBuilding->setlevel(1, m_Scene);
 	NowBuilding->Destroy(m_Scene);
 
 
@@ -136,8 +136,8 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		}
 
 		static float yaw = 180.0f, pitch = 0.0f;
-		yaw += 100.0f * delta.x * dt;
-		pitch -= 100.0f * delta.y * dt;
+		yaw += 0.2f * delta.x;
+		pitch -= 0.2f * delta.y;
 
 		if (pitch > 89.99f) pitch = 89.99f;
 		if (pitch < -89.99f) pitch = -89.99f;
@@ -229,15 +229,24 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 			}
 			else {
 				//start building
+				BuildWarning->Destroy(m_Scene);
 				delete NowBuilding;
 				NowBuilding = new ArcherTower(m_Scene);
+				switch (BuildingIdx)
+				{
+				case 0: NowBuilding = new ArcherTower(m_Scene); break;
+				case 1: NowBuilding = new BallistaTower(m_Scene); break;
+				case 2: NowBuilding = new CannonTower(m_Scene); break;
+				case 3: NowBuilding = new PoisonTower(m_Scene); break;
+				case 4: NowBuilding = new WizardTower(m_Scene); break;
+				}
 				NowBuilding->setPosition(glm::vec3(Building.x * 96, 0, Building.y * 96));
 				NowBuilding->setlevel(1, m_Scene);
 				NowBuilding->setTransparent();
 			}
 		}
 	}
-	if (IO::GetMouseScroll() == -1 && Building != glm::ivec2(-1, -1)) {
+	if (IO::GetMouseScroll() <= -1 && Building != glm::ivec2(-1, -1)) {
 		BuildingIdx += 4;
 		BuildingIdx %= 5;
 		NowBuilding->Destroy(m_Scene);
@@ -272,7 +281,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		NowBuilding->setlevel(1, m_Scene);
 		NowBuilding->setTransparent();
 	}
-	if (IO::GetMouseScroll() == 1 && Building != glm::ivec2(-1, -1)) {
+	if (IO::GetMouseScroll() >= 1 && Building != glm::ivec2(-1, -1)) {
 		BuildingIdx += 1;
 		BuildingIdx %= 5;
 		NowBuilding->Destroy(m_Scene);
@@ -361,7 +370,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 	//Upgrade Tower
 	if (IO::IsKeyDown(KeyCode::U) && NS.x != -1 && towers[NS.x][NS.y] != NULL) {
 		int lvl = towers[NS.x][NS.y]->getLevel();
-		int cost = int(100 * glm::pow(0.9, lvl));
+		int cost = int(100 * glm::pow(1.2, lvl));
 		if (lvl != 4 && gold->GetGold(); gold->GetGold() >= cost) {
 			towers[NS.x][NS.y]->setlevel(lvl + 1, m_Scene);
 			gold->UpdateGold(-cost);
@@ -482,7 +491,7 @@ void World::MobMove(float dt)
 					}
 				}
 			}
-			gold->UpdateGold(mob->getLevel()*50);
+			gold->UpdateGold(glm::log(mob->getLevel() + 1) * 10 + 40);
 			mob->Destroy(m_Scene);
 			delete mob;
 			it = m_MobMap.erase(it);
@@ -561,7 +570,7 @@ void World::MobMove(float dt)
 			glm::ivec2 Mobmap = m_map->Pos2Map(MobPos);
 			glm::vec3 OldMobPos = MobPos;
 			if (glm::length(delta) > 40 && glm::length(delta2) >240) {
-				MobPos += dir * dt * 400.f;
+				MobPos += dir * dt * 200.f;
 			}
 			if (glm::length(delta2) <= 240) {
 				hpBar->TakeDamage(mob->getDamage()*dt);
@@ -624,7 +633,8 @@ Entity World::CreateCamera()
 	// Create a camera
 	Entity camera = m_Scene->CreateEntity("Camera");
 	PerspectiveCameraSpecification specs;
-	specs.FarPlane = 1000.f;
+	specs.Fov = glm::radians(100.0f);
+	specs.FarPlane = 950.f;
 	camera.AddComponent<CameraComponent>(Camera(specs));
 
 	auto& transform = camera.GetComponent<TransformComponent>();

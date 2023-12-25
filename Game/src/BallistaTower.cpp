@@ -61,7 +61,7 @@ void BallistaTower::OnUpdate(float dt)
 		if (glm::length2(delta) < m_ArrowSpeed * m_ArrowSpeed * dt * dt)
 		{
 			if (target)
-				target->takeDamage(_damage * 0.5f);
+				target->takeDamage(_damage * 0.15f);
 
 			AssetLibrary::DestoryModel(arrow);
 			it = m_AttackList.erase(it);

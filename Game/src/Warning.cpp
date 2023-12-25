@@ -1,4 +1,5 @@
 #include "Warning.h"
+#include "AssetLibrary.h"
 Warning::Warning(Ref<Scene> m_Scene, int code)
 {
 	
@@ -15,7 +16,7 @@ Warning::Warning(Ref<Scene> m_Scene, int code)
 
 	auto& textRenderer = _entity.AddComponent<TextRendererComponent>();
 	textRenderer.Text = ""; //顯示文字內容
-	static AssetHandle font = AssetManager::LoadFont("Fonts/OpenSans-Regular.ttf"); //load字體
+	static AssetHandle font = AssetLibrary::Get(Asset::OpenSansFont); //load字體
 	textRenderer.Font = font;
 	textRenderer.FontSize = 20.0f; //字體大小
 	textRenderer.Size = glm::vec2(200.0f, 100.0f); //文字框大小

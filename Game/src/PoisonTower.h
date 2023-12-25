@@ -30,7 +30,7 @@ protected:
 	float m_FireInterval = 0.6f;
 	float m_MageBallInitailSpeed = 100.0f;
 	float m_MageBallTrackingSpeed = 500.0f;
-	float m_MageBallAcceleration = 50.0f;
+	float m_MageBallAcceleration = 70.0f;
 	float m_Timer = 0.0f;
 	const static glm::vec3 s_AttackPointOffset;
 };
