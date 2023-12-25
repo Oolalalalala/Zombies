@@ -29,6 +29,10 @@ World::World()
 	m_Text = CreateText(); // 創造2D文字的範例
 	m_Music = CreateMusic();
 	m_Sound = CreateSound();
+	m_SoundEffect1 = CreateSoundEffect(1);
+	m_SoundEffect2 = CreateSoundEffect(2);
+	m_SoundEffect3 = CreateSoundEffect(3);
+	m_SoundEffect4 = CreateSoundEffect(4);
 
 	NowBuilding = new ArcherTower(m_Scene);
 	NowBuilding->setPosition(glm::vec3(0, 0, 0));
@@ -165,6 +169,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 			BuildWarning->Destroy(m_Scene);
 			delete BuildWarning;
 			BuildWarning = new Warning(m_Scene, 3);
+			m_SoundEffect3.GetComponent<SoundSourceComponent>().Begin = true;
 		}
 		else {
 			Building = m_map->FindFloor(lookat, cameraTransform.Position);
@@ -172,6 +177,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 				BuildWarning->Destroy(m_Scene);
 				delete BuildWarning;
 				BuildWarning = new Warning(m_Scene, 2);
+				m_SoundEffect4.GetComponent<SoundSourceComponent>().Begin = true;
 				Building = glm::ivec2(-1, -1);
 			}
 			else {
@@ -260,6 +266,7 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 			w->Destroy(m_Scene);
 			delete w;
 			w = new Warning(m_Scene, 1);
+			m_SoundEffect3.GetComponent<SoundSourceComponent>().Begin = true;
 		}
 		else
 		{
@@ -316,11 +323,13 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 			w->Destroy(m_Scene);
 			delete w;
 			w = new Warning(m_Scene, 4);
+			m_SoundEffect4.GetComponent<SoundSourceComponent>().Begin = true;
 		}
 		else {
 			w->Destroy(m_Scene);
 			delete w;
 			w = new Warning(m_Scene, 1);
+			m_SoundEffect4.GetComponent<SoundSourceComponent>().Begin = true;
 		}
 	}
 
@@ -509,6 +518,14 @@ void World::MobMove(float dt)
 			}
 			if (glm::length(delta2) <= 240) {
 				hpBar->TakeDamage(mob->getDamage()*dt);
+				if (hpBar->GetHp() <= 5000.f && go == false) {
+					m_SoundEffect1.GetComponent<SoundSourceComponent>().Begin = true;
+					go = 1;
+				}
+				if (hpBar->GetHp() <= 2500.f && nervous == false) {
+					m_SoundEffect2.GetComponent<SoundSourceComponent>().Begin = true;
+					nervous = 1;
+				}
 				if (hpBar->GetHp() <= 0.0) {
 					Application::Get().Close();
 				}
@@ -712,6 +729,35 @@ Entity World::CreateSound()
 	return sound;
 }
 
+Entity World::CreateSoundEffect(int idx)
+{
+	Entity soundef = m_Scene->CreateEntity("sound");
+	auto& source = soundef.AddComponent<SoundSourceComponent>();
+	switch (idx) {
+	case 1: {
+		source.Sound = AssetManager::LoadSound("Sound/go.mp3");
+		break;
+	}
+	case 2: {
+		source.Sound = AssetManager::LoadSound("Sound/nervous.mp3");
+		break;
+	}
+	case 3: {
+		source.Sound = AssetManager::LoadSound("Sound/think.mp3");
+		break;
+	}
+	case 4: {
+		source.Sound = AssetManager::LoadSound("Sound/whchj.mp3");
+		break;
+	}
+	}
+	source.Volume = 1.0f;
+	source.FadeIn = 0.0f;
+	source.FadeOut = 0.0f;
+
+	return soundef;
+}
+
 Entity World::CreateTime()
 {
 	Entity Time= m_Scene->CreateEntity("Time");
@@ -732,5 +778,5 @@ Entity World::CreateTime()
 	textRenderer.OutlineThickness = 0.16f; // In the range [0, 0.3f] (not sure)
 	return Time;
 }
-
+ 
 

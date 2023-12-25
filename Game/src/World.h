@@ -47,6 +47,7 @@ private:
 	Entity CreateText();
 	Entity CreateMusic();
 	Entity CreateSound();
+	Entity CreateSoundEffect(int idx);
 	Entity CreateFloor(int i, int j);
 	Entity CreateTime();
 
@@ -58,6 +59,11 @@ private:
 	Entity m_Text;
 	Entity m_Music;
 	Entity m_Sound;
+	Entity m_SoundEffect1;
+	Entity m_SoundEffect2;
+	Entity m_SoundEffect3;
+	Entity m_SoundEffect4;
+	bool go=0, nervous=0;
 
 	Entity m_Time;
 
