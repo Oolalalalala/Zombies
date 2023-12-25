@@ -21,14 +21,14 @@ World::World()
 	w = new Warning(m_Scene, 0);
 	BuildWarning = new Warning(m_Scene, 0);
 
+	//create floor 51*51
+	m_map = new Map(m_Scene, 51);
+
 	// 簡易的示範程式碼，我把程式碼移到下面了，不然很亂
 	m_Camera = CreateCamera();
 	m_Text = CreateText(); // 創造2D文字的範例
 	m_Music = CreateMusic();
 	m_Sound = CreateSound();
-
-	//create floor 51*51
-	m_map = new Map(m_Scene, 51);
 
 	NowBuilding = new ArcherTower(m_Scene);
 	NowBuilding->setPosition(glm::vec3(0, 0, 0));
@@ -82,10 +82,6 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 	cameraTransform.Rotation = glm::rotate(cameraTransform.Rotation, glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
 	cameraTransform.Rotation = glm::rotate(cameraTransform.Rotation, glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
 	
-
-	w->update(m_Scene, dt);
-	BuildWarning->update(m_Scene, dt);
-
 
 	// Rotation to direction
 	#if 1
@@ -291,17 +287,40 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 	}
 	#endif
 
+	//Upgrade Tower
+	if (IO::IsKeyDown(KeyCode::U) && towers[NS.x][NS.y] != NULL) {
+		int lvl = towers[NS.x][NS.y]->getLevel();
+		int cost = int(100 * glm::pow(0.9, lvl));
+		if (lvl != 4 && gold->gold >= cost) {
+			towers[NS.x][NS.y]->setlevel(lvl + 1, m_Scene);
+			gold->gold -= cost;
+		}
+		else if (lvl == 4) {
+			w->Destroy(m_Scene);
+			delete w;
+			w = new Warning(m_Scene, 4);
+		}
+		else {
+			w->Destroy(m_Scene);
+			delete w;
+			w = new Warning(m_Scene, 1);
+		}
+	}
+
 	// Mob path and building destroy
 	static int lvl = 1;
-	//lvl = 1 + int(TotalTime / LvlUpPeriod);
+	lvl = 1 + int(TotalTime / LvlUpPeriod);
+	static int temp = 0;
 	if (PathTime > PathPeriod)
 	{
+		temp++;
+		if (temp == 2)temp++;
 		glm::ivec2 spawn = m_map->DecidePath(m_Scene);
 		m_SpawnList.push_back(spawn);
 		PathTime -= PathPeriod;
 		ClearMap();
-		for(auto it = m_SpawnList.begin();it!=m_SpawnList.end();it++) MobSpawn(*it, lvl);
-		//MobSpawn(spawn, lvl);
+		//for(auto it = m_SpawnList.begin();it!=m_SpawnList.end();it++) MobSpawn(*it, lvl);
+		if(temp<=8)MobSpawn(spawn, temp);
 	}
 	MobMove(dt);
 	for (int i = 0;i < 51;i++) {
@@ -323,19 +342,23 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 	}
 
 
+
+	w->update(m_Scene, dt);
+	BuildWarning->update(m_Scene, dt);
+
 	m_Scene->OnUpdate(dt); // Renders the scene
 }
 
 
 void World::MobSpawn(glm::ivec2 spawn, int lvl) {
 	int MobIdx = glm::linearRand(1, 6);
-	MobIdx = 1;
+	MobIdx = lvl;
 	Enemy* mob = NULL;
 	switch (MobIdx) {
 		case 1: {//BlueDragon
 			mob = new BlueDragon(m_Scene, lvl);
 			mob->_type = 1;
-			//mob->setRotation(glm::rotate(mob->getRotation(), glm::radians(90.0f), glm::vec3(1.0f, 0.f, 0.f)));
+			//mob->setRotation(DefaultDir);
 			break;
 		}
 		case 3: {//MonsterSkull
@@ -405,9 +428,9 @@ void World::MobMove(float dt)
 			glm::quat rot;
 			switch (MobIdx) {
 			case 1: {
-				LR = (dir.x > 0) ? -1.f : 1.f;
-				angle = glm::dot(dir, glm::vec3(0.f, 0.f, -1.f));
-				rot = glm::rotate(DefaultDir, LR * glm::acos(angle), glm::vec3(1.0f, 0.0f, 0.0f));
+				LR = (dir.x < 0) ? -1.f : 1.f;
+				angle = glm::dot(dir, glm::vec3(0.f, 0.f, 1.f));
+				rot = glm::rotate(DefaultDir, 1 * glm::radians(90.f), glm::vec3(0.f, 1.f, 0.f));
 				break;
 			}
 			case 7: {
@@ -437,7 +460,8 @@ void World::MobMove(float dt)
 					Application::Get().Close();
 				}
 			}
-			mob->setPosition(MobPos);
+			//mob->setPosition(MobPos);
+			
 			m_MobMap[mob] = m_map->Pos2Map(MobPos);
 			for (int i = 0;i < 51;i++) {
 				for (int j = 0;j < 51;j++) {
@@ -482,7 +506,7 @@ Entity World::CreateCamera()
 	camera.AddComponent<CameraComponent>(Camera(specs));
 
 	auto& transform = camera.GetComponent<TransformComponent>();
-	transform.Position = { 2400.0f, 50.0f, 2400.f };
+	transform.Position = { 400.0f, 50.0f, 400.f };
 	transform.Rotation = glm::quat(glm::vec3{ 0.0f, 180.0f, 0.0f });
 
 	return camera;

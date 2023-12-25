@@ -23,14 +23,14 @@ Warning::Warning(Ref<Scene> m_Scene, int code)
 	textRenderer.OutlineThickness = 0.16f; // In the range [0, 0.3f] (not sure) //邊框粗細
 
 	switch (code) {
-		case 1: //升級達到上限
+		case 1: //沒錢買塔
 		{
 			_type = 1; //警告
 			_showtime = 400;
 			UI.Anchor = glm::vec2(0.f, 0.7f);
 			UI.Pivot = glm::vec2(0.f, 0.f);
 
-			textRenderer.Size = glm::vec2(250.0f, 100.0f);//not in the middle
+			textRenderer.Size = glm::vec2(100.0f, 100.0f);//not in the middle
 			textRenderer.Text = "No money!";
 
 			break;
@@ -56,6 +56,18 @@ Warning::Warning(Ref<Scene> m_Scene, int code)
 
 			textRenderer.Size = glm::vec2(200.0f, 100.0f);//not in the middle
 			textRenderer.Text = "Finish Current Build First!";
+
+			break;
+		}
+		case 4: //升級達到上限
+		{
+			_type = 1; //警告
+			_showtime = 400;
+			UI.Anchor = glm::vec2(0.f, 0.7f);
+			UI.Pivot = glm::vec2(0.f, 0.f);
+
+			textRenderer.Size = glm::vec2(100.0f, 100.0f);//not in the middle
+			textRenderer.Text = "Alr lvl 4!";
 
 			break;
 		}

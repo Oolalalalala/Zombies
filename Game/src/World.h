@@ -71,7 +71,7 @@ private:
 	std::vector<glm::ivec2> AttackableTower[51][51];
 
 	glm::quat DefaultDir;
-	float PathPeriod = 5.f, LvlUpPeriod = 10.f;
+	float PathPeriod = 5.f, LvlUpPeriod = 25.f;
 
 	Patrick* p;
 	WhiteChineseDragon* wcd;
