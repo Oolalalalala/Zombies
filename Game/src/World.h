@@ -9,7 +9,6 @@
 #include "ShadowDragon.h"
 #include "MonsterSkull.h"
 #include "Monster.h"
-#include "FantasyDragon.h"
 #include "BlueDragon.h"
 #include "BlueDragon.h"
 #include "BabyGrogu.h"
@@ -18,10 +17,13 @@
 #include "CannonTower.h"
 #include "PoisonTower.h"
 #include "WizardTower.h"
+#include "H_PBar.h"
+#include "Gold.h"
 
 //Some Controling stuff
 #include "Warning.h"
 #include "Map.h"
+
 
 class World
 {
@@ -32,7 +34,7 @@ public:
 	void OnUpdate(float dt);
 	void ClearMap();
 	void MobSpawn(glm::ivec2, int);
-	void MobMove();
+	void MobMove(float);
 
 private:
 	Entity CreateCamera();
@@ -63,9 +65,10 @@ private:
 	Warning* w;
 	Warning* BuildWarning;
 	glm::ivec2 PS, NS, Building;
-	std::vector<Enemy*> m_MonsterList;
 	std::vector<glm::ivec2> m_SpawnList;
 	std::unordered_map<Enemy*, glm::ivec2> m_MobMap;
+
+	std::vector<glm::ivec2> AttackableTower[51][51];
 
 	glm::quat DefaultDir;
 	float PathPeriod = 5.f, LvlUpPeriod = 10.f;
@@ -76,9 +79,12 @@ private:
 	ShadowDragon* shd;
 	MonsterSkull* ms;
 	Monster* m;
-	FantasyDragon* fd;
 	BlueDragon* bd;
 	BabyGrogu* bg;
 
+	Entity crystal;
+	H_PBar* hpBar;
+
+	Gold* gold;
 };
 

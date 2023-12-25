@@ -31,7 +31,7 @@ Warning::Warning(Ref<Scene> m_Scene, int code)
 			UI.Pivot = glm::vec2(0.f, 0.f);
 
 			textRenderer.Size = glm::vec2(250.0f, 100.0f);//not in the middle
-			textRenderer.Text = "Alr Lvl 4!";
+			textRenderer.Text = "No money!";
 
 			break;
 		}

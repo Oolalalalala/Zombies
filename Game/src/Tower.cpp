@@ -36,6 +36,7 @@ void Tower::takeDamage(double D)
 void Tower::setlevel(int l, Ref<Scene> scene)
 {
 	_level = l;
+	_damage = 100 * l;
 	changeModel(scene);
 	_entity.GetComponent<MeshRendererComponent>().Enabled = true;
 }
