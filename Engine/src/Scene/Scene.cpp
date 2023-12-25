@@ -79,7 +79,7 @@ void Scene::OnUpdate(float dt)
 	{
 		RendererAPI::SetViewport(0, 0, windowSize.x, windowSize.y);
 	}
-	RendererAPI::SetClearColor(glm::vec4(0.5f));
+	RendererAPI::SetClearColor(glm::vec4(0.1f));
 	RendererAPI::Clear();
 
 
