@@ -47,6 +47,7 @@ private:
 	Entity CreateMusic();
 	Entity CreateSound();
 	Entity CreateFloor(int i, int j);
+	Entity CreateTime();
 
 private:
 	Ref<Scene> m_Scene;
@@ -56,6 +57,8 @@ private:
 	Entity m_Text;
 	Entity m_Music;
 	Entity m_Sound;
+
+	Entity m_Time;
 
 	Map* m_map;
 

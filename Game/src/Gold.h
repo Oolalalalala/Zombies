@@ -3,7 +3,7 @@
 #include "AssetLibrary.h"
 class Gold
 {
-public:
+private:
 	int gold=0;
 	Entity block;
 public:
@@ -11,4 +11,5 @@ public:
 	~Gold();
 	void UpdateGold(int);
 	void UpdateBlock();
+	int GetGold();
 };

@@ -52,29 +52,29 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 
 	s_Assets[Asset::PatrickTexture] = AssetManager::LoadTexture("Model/enemy/spongebob_squarepants_patrick/textures/MI_Patrick_PBR_baseColor.png");
 	s_Assets[Asset::PatrickMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::PatrickTexture]);
-	s_ModelPrefabs[Asset::spongebob_squarepants_patrick] = Model::Load(scene, "Model/enemy/spongebob_squarepants_patrick/scene.gltf", { s_Assets[Asset::PatrickMaterial] });
+	s_ModelPrefabs[Asset::spongebob_squarepants_patrick] = Model::Load(scene, "Model/enemy/spongebob_squarepants_patrick/untitled.glb", { s_Assets[Asset::PatrickMaterial] });
 	s_ModelPrefabs[Asset::spongebob_squarepants_patrick].GetComponent<MeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::spongebob_squarepants_patrick].GetComponent<TransformComponent>().Scale *= 100.0f;
 	
 
 	s_Assets[Asset::white_chinese_dragonTexture] = AssetManager::LoadTexture("Model/enemy/white_chinese_dragon/textures/BaiLongZuoQi_baseColor.png");
 	s_Assets[Asset::white_chinese_dragonMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::white_chinese_dragonTexture]);
-	s_ModelPrefabs[Asset::white_chinese_dragon] = Model::LoadSkinned(scene, "Model/enemy/white_chinese_dragon/scene.gltf", { s_Assets[Asset::white_chinese_dragonMaterial] });
+	s_ModelPrefabs[Asset::white_chinese_dragon] = Model::LoadSkinned(scene, "Model/enemy/white_chinese_dragon/untitled.glb", { s_Assets[Asset::white_chinese_dragonMaterial] });
 	s_ModelPrefabs[Asset::white_chinese_dragon].GetComponent<SkinnedMeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::white_chinese_dragon].GetComponent<TransformComponent>().Scale *= 50.0f;
 
 	s_Assets[Asset::snow_dragonTexture] = AssetManager::LoadTexture("Model/enemy/snow_dragon/textures/zq127_binglong_1_baseColor.png");
 	s_Assets[Asset::snow_dragonMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::snow_dragonTexture]);
-	s_ModelPrefabs[Asset::snow_dragon] = Model::LoadSkinned(scene, "Model/enemy/snow_dragon/scene.gltf", { s_Assets[Asset::snow_dragonMaterial] });
+	s_ModelPrefabs[Asset::snow_dragon] = Model::LoadSkinned(scene, "Model/enemy/snow_dragon/untitled.glb", { s_Assets[Asset::snow_dragonMaterial] });
 	s_ModelPrefabs[Asset::snow_dragon].GetComponent<SkinnedMeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::snow_dragon].GetComponent<TransformComponent>().Scale *= 35.0f;
 	
 	s_Assets[Asset::shadow_dragonTexture] = AssetManager::LoadTexture("Model/enemy/shadow_dragon/textures/efmat_npc_mst_228_fire_01_baseColor.png");
 	s_Assets[Asset::shadow_dragonMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::shadow_dragonTexture]);
-	s_ModelPrefabs[Asset::shadow_dragon] = Model::LoadSkinned(scene,"Model/enemy/shadow_dragon/scene.gltf" , { s_Assets[Asset::shadow_dragonMaterial] });
+	s_ModelPrefabs[Asset::shadow_dragon] = Model::LoadSkinned(scene,"Model/enemy/shadow_dragon/untitled.glb" , { s_Assets[Asset::shadow_dragonMaterial] });
 	s_ModelPrefabs[Asset::shadow_dragon].GetComponent<SkinnedMeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::shadow_dragon].GetComponent<TransformComponent>().Scale *= 35.0f;
-	s_ModelPrefabs[Asset::shadow_dragon].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::shadow_dragon].GetComponent<TransformComponent>().Rotation, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//s_ModelPrefabs[Asset::shadow_dragon].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::shadow_dragon].GetComponent<TransformComponent>().Rotation, glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 	s_Assets[Asset::monster_skull_hight_polyTexture1] = AssetManager::LoadTexture("Model/enemy/monster_skull_hight_poly/textures/MI_M_B_43_Longhaikuilei_body_baseColor.png");
 	s_Assets[Asset::monster_skull_hight_polyMaterial1] = AssetManager::CreateMaterial(s_Assets[Asset::monster_skull_hight_polyTexture1]);
@@ -82,25 +82,25 @@ void AssetLibrary::Initialize(Ref<Scene> scene)
 	s_Assets[Asset::monster_skull_hight_polyMaterial2] = AssetManager::CreateMaterial(s_Assets[Asset::monster_skull_hight_polyTexture2]);
 	s_Assets[Asset::monster_skull_hight_polyTexture3] = AssetManager::LoadTexture("Model/enemy/monster_skull_hight_poly/textures/MI_M_B_43_Longhaikuilei_head_baseColor.png");
 	s_Assets[Asset::monster_skull_hight_polyMaterial3] = AssetManager::CreateMaterial(s_Assets[Asset::monster_skull_hight_polyTexture3]);
-	s_ModelPrefabs[Asset::monster_skull_hight_poly] = Model::LoadSkinned(scene,"Model/enemy/monster_skull_hight_poly/scene.gltf" , { s_Assets[Asset::monster_skull_hight_polyMaterial1], s_Assets[Asset::monster_skull_hight_polyMaterial2], s_Assets[Asset::monster_skull_hight_polyMaterial3] });
+	s_ModelPrefabs[Asset::monster_skull_hight_poly] = Model::LoadSkinned(scene,"Model/enemy/monster_skull_hight_poly/untitled.glb" , { s_Assets[Asset::monster_skull_hight_polyMaterial1], s_Assets[Asset::monster_skull_hight_polyMaterial2], s_Assets[Asset::monster_skull_hight_polyMaterial3] });
 	s_ModelPrefabs[Asset::monster_skull_hight_poly].GetComponent<SkinnedMeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::monster_skull_hight_poly].GetComponent<TransformComponent>().Scale = glm::vec3(0.001f);
 	s_ModelPrefabs[Asset::monster_skull_hight_poly].GetComponent<TransformComponent>().Scale *= 70.0f;
-	s_ModelPrefabs[Asset::monster_skull_hight_poly].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::monster_skull_hight_poly].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//s_ModelPrefabs[Asset::monster_skull_hight_poly].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::monster_skull_hight_poly].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	s_Assets[Asset::monster_low_polyTexture] = AssetManager::LoadTexture("Model/enemy/monster_low_poly/textures/R27401_baseColor.png");
 	s_Assets[Asset::monster_low_polyMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::monster_low_polyTexture]);
-	s_ModelPrefabs[Asset::monster_low_poly] = Model::LoadSkinned(scene,"Model/enemy/monster_low_poly/scene.gltf" , { s_Assets[Asset::monster_low_polyMaterial] });
+	s_ModelPrefabs[Asset::monster_low_poly] = Model::LoadSkinned(scene,"Model/enemy/monster_low_poly/untitled.glb" , { s_Assets[Asset::monster_low_polyMaterial] });
 	s_ModelPrefabs[Asset::monster_low_poly].GetComponent<SkinnedMeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::monster_low_poly].GetComponent<TransformComponent>().Scale *= 20.0f;
-	s_ModelPrefabs[Asset::monster_low_poly].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::monster_low_poly].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	//s_ModelPrefabs[Asset::monster_low_poly].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::monster_low_poly].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 
 	s_Assets[Asset::dragon_blue_low_polyTexture] = AssetManager::LoadTexture("Model/enemy/dragon_blue_-_low_poly/textures/m_13jzq_g_baseColor.png");
 	s_Assets[Asset::dragon_blue_low_polyMaterial] = AssetManager::CreateMaterial(s_Assets[Asset::dragon_blue_low_polyTexture]);
-	s_ModelPrefabs[Asset::dragon_blue_low_poly] = Model::LoadSkinned(scene, "Model/enemy/dragon_blue_-_low_poly/scene.gltf", { s_Assets[Asset::dragon_blue_low_polyMaterial] });
+	s_ModelPrefabs[Asset::dragon_blue_low_poly] = Model::LoadSkinned(scene, "Model/enemy/dragon_blue_-_low_poly/untitled.glb", { s_Assets[Asset::dragon_blue_low_polyMaterial] });
 	s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<SkinnedMeshRendererComponent>().Enabled = false;
 	s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Scale *= 10.0f;
-	s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	//s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Rotation = glm::rotate(s_ModelPrefabs[Asset::dragon_blue_low_poly].GetComponent<TransformComponent>().Rotation, glm::radians(270.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
 	s_Assets[Asset::baby_yoda_grogu_with_glassesTexture1] = AssetManager::LoadTexture("Model/enemy/baby_yoda_grogu_with_glasses/textures/Material.004_baseColor.jpeg");
 	s_Assets[Asset::baby_yoda_grogu_with_glassesMaterial1] = AssetManager::CreateMaterial(s_Assets[Asset::baby_yoda_grogu_with_glassesTexture1]);
@@ -182,6 +182,10 @@ void AssetLibrary::ShutDown()
 	AssetManager::UnloadTexture(s_Assets[Asset::TowerTexture]);
 
 	AssetManager::UnloadFont(s_Assets[Asset::OpenSansFont]);
+
+
+
+
 }
 
 AssetHandle AssetLibrary::Get(Asset asset)
