@@ -87,7 +87,7 @@ World::~World()
 	IO::SetCursorVisibility(true);
 }
 
-float speed = 700.0f;
+float speed = 100.0f;
 void World::OnUpdate(float dt) // dt現在是正確的了!
 {
 	auto& cameraTransform = m_Camera.GetComponent<TransformComponent>();
@@ -160,9 +160,9 @@ void World::OnUpdate(float dt) // dt現在是正確的了!
 		cameraTransform.Position -= speed * glm::cross(dir, glm::vec3(0.0f, 1.0f, 0.0f)) * dt;
 	if (IO::IsKeyPressed(KeyCode::D))
 		cameraTransform.Position += speed * glm::cross(dir, glm::vec3(0.0f, 1.0f, 0.0f)) * dt;
-	if (IO::IsKeyPressed(KeyCode::Space))
-		if (cameraTransform.Position.y < 2048) cameraTransform.Position.y += speed * dt;
-	if (IO::IsKeyPressed(KeyCode::LeftShift))
+	if (IO::IsKeyPressed(KeyCode::Space) && 0)
+		if (cameraTransform.Position.y < 250) cameraTransform.Position.y += speed * dt;
+	if (IO::IsKeyPressed(KeyCode::LeftShift) && 0)
 		if (cameraTransform.Position.y > -110) cameraTransform.Position.y -= speed * dt;
 	#endif
 	}
@@ -630,11 +630,11 @@ Entity World::CreateCamera()
 	// Create a camera
 	Entity camera = m_Scene->CreateEntity("Camera");
 	PerspectiveCameraSpecification specs;
-	specs.FarPlane = 2500.f;
+	specs.FarPlane = 800.f;
 	camera.AddComponent<CameraComponent>(Camera(specs));
 
 	auto& transform = camera.GetComponent<TransformComponent>();
-	transform.Position = { 400.0f, 50.0f, 400.f };
+	transform.Position = { 2400.0f, 250.0f, 2400.f };
 	transform.Rotation = glm::quat(glm::vec3{ 0.0f, 180.0f, 0.0f });
 
 	return camera;

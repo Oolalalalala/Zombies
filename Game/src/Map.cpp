@@ -89,7 +89,7 @@ glm::vec4 Map::DecideColor(int status) {
 			break;
 		}
 		default: {//space : green
-			ans = glm::vec4(0.f, 1.f, 0.f, 1.f);
+			ans = glm::vec4(0.f, 0.5f, 0.f, 1.f);
 			break;
 		}
 	}
